@@ -1,0 +1,19 @@
+<div class="font-semibold text-xl text-center">Đăng nhập</div>
+<form [formGroup]="dataLogin">
+    <label class="font-medium">*Email</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_mail.png" alt="Email">
+        <input class="outline-none grow" type="text" formControlName="email" />
+    </div>
+    <label class="block mt-5 font-medium">*Mật khẩu</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_padlock.png" alt="Password">
+        <input class="outline-none grow" [type]="showPass ? 'text' : 'password'" formControlName="password" />
+        <img class="w-[18px]" (click)="showPass = !showPass" src="/images/icons/ic_{{ showPass ? 'hidden' : 'eye' }}.png" alt="icon">
+    </div>
+</form>
+<div class="text-end select-none cursor-pointer mt-2 mb-3 text-sm text-[var(--color-primary)] hover:underline">
+    Quên mật khẩu?
+</div>
+<div class="btn-primary w-full text-center" (click)="login()">Đăng nhập</div>
+<div class="text-center my-3">Hoặc</div>

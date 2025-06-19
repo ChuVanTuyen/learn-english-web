@@ -1,0 +1,68 @@
+<div class="min-h-[80vh] container mx-auto">
+    <div class="flex justify-between items-center mt-4 mb-3">
+        <div class="flex items-center bg-white rounded-full px-4 py-2">
+            <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+            Trở về
+        </div>
+        <div class="text-2xl font-semibold">Part {{ part }}</div>
+        <div class="flex items-center bg-white rounded-full px-4 py-2">
+            Tùy chọn
+            <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-3">
+        <div class="col-span-3">
+            @for (ques of listQuestion; track $index) {
+                <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
+                    @if(ques.image) {
+                        <img class="block max-w-[390px] mx-auto" [src]="ques.image" alt="Intro">
+                    }
+                    @if(ques.text_read) {
+                        <div [innerHTML]="ques.text_read | safe:'html'"></div>
+                    }
+                    @for (child of ques.child_ques; track child;let childIdx = $index) {
+                        <div id="ques-{{ child.idx }}" [class.mt-5]="childIdx > 0">
+                            <span>{{ child.idx }}. </span>
+                            <span [innerHTML]="child.title"></span>
+                        </div>
+                        @if(child.image) {
+                            <img class="max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
+                        }
+                        <div class="grid gap-3 grid-cols-2 mt-3">
+                            @for (answer of child.answers; track answer;let ansIdx = $index) {
+                                <div class="btn-answer" [class.active]="ansIdx === child.selected" (click)="chooseAns(child, ansIdx)">
+                                    {{ answer }}
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div>
+            <div class="sticky top-3">
+                <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
+                    <div class="flex items-center">
+                        <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
+                        <div>00:45:00</div>
+                    </div>
+                    <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
+                </div>
+                <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
+                    <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
+                        @for (ques of listQuestion; track ques; let quesIdx = $index) {
+                            @for (child of ques.child_ques; track child; let childIdx = $index) {
+                                <div class="question-item" (click)="chooseQuestion(child.idx)"
+                                    [class.active]="child.selected > -1"
+                                >
+                                    {{ child.idx }}
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

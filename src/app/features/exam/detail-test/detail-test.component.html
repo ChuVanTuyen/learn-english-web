@@ -1,0 +1,116 @@
+<div class="container mx-auto pb-6">
+    <div class="flex justify-between items-center mt-4 mb-3">
+        <div class="flex items-center bg-white rounded-full px-4 py-2">
+            <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+            Trở về
+        </div>
+        <div class="text-2xl font-semibold">Đề 1</div>
+        <div class="flex items-center bg-white rounded-full px-4 py-2">
+            Tùy chọn
+            <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
+        </div>
+    </div>
+    @if(detailTest) {
+        <div class="grid grid-cols-4 gap-3">
+            <div class="col-span-3">
+                <div class="grid gap-3 grid-cols-[40px_1fr] items-center px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
+                    <div class="p-2 rounded-full bg-[var(--color-primary)]">
+                        <img class="w-6" src="/images/icons/ic_headphone.png" alt="Listen">
+                    </div>
+                    <div class="align-middle font-semibold text-lg">Part {{ partActive + 1 }}: {{
+                        detailTest.skills[skillActive].parts[partActive].name }}</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
+                    <div>{{ detailTest.skills[skillActive].parts[partActive].title }}</div>
+                    @if(partIntros[skillActive * 4 + partActive]) {
+                        @if(partIntros[skillActive * 4 + partActive].image) {
+                            <img class="block max-w-[390px] mx-auto" [src]="partIntros[skillActive * 4 + partActive].image" alt="Intro">
+                        }
+                        <div>{{ partIntros[skillActive * 4 + partActive].title }}</div>
+                        <div class="grid gap-3 grid-cols-2 mt-2">
+                            @for (answer of partIntros[skillActive * 4 + partActive].answers; track $index) {
+                            <div class="btn-answer">
+                                {{ answer }}
+                            </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                @for (ques of detailTest.skills[skillActive].parts[partActive].questions; track $index) {
+                    <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
+                        @if(ques.image) {
+                            <img class="block max-w-[390px] mx-auto" [src]="ques.image" alt="Intro">
+                        }
+                        @if(ques.text_read) {
+                            <div [innerHTML]="ques.text_read | safe:'html'"></div>
+                        }
+                        @for (child of ques.child_ques; track child;let childIdx = $index) {
+                            <div id="ques-{{ child.idx }}" [class.mt-5]="childIdx > 0">
+                                <span>{{ child.idx }}. </span>
+                                <span [innerHTML]="child.title"></span>
+                            </div>
+                            @if(child.image) {
+                                <img class="max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
+                            }
+                            <div class="grid gap-3 grid-cols-2 mt-3">
+                                @for (answer of child.answers; track answer;let ansIdx = $index) {
+                                    <div class="btn-answer" [class.active]="ansIdx === child.selected" (click)="chooseAns(child, ansIdx)">
+                                        {{ answer }}
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if(!skillActive || partActive < 2) {
+                    <div class="flex justify-end">
+                        <div class="flex items-center text-[var(--color-primary-10)] text-lg font-medium py-2 px-4 rounded-full border border-[var(--color-primary-10)] cursor-pointer"
+                            (click)="nextPart()"
+                        >
+                            Next part <img class="w-6 ms-2" src="/images/icons/ic_arrow_left_primary.svg" alt="Next">
+                        </div>
+                    </div>
+                }
+            </div>
+            <div>
+                <div class="sticky top-3">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
+                        <div class="flex items-center">
+                            <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
+                            <div>00:45:00</div>
+                        </div>
+                        <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
+                    </div>
+                    <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
+                        <div class="font-semibold text-lg pb-3 border-b-[var(--color-neutral-95)] border-b">{{ detailTest.skills[skillActive].name }}</div>
+                        @for (part of detailTest.skills[skillActive].parts; track part; let partIdx = $index) {
+                            @if(partIdx === partActive) {
+                                <div class="font-medium mb-2 mt-3">Part {{ partIdx + 1 }}</div>
+                                <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
+                                    @for (ques of part.questions; track ques; let quesIdx = $index) {
+                                        @for (child of ques.child_ques; track child; let childIdx = $index) {
+                                            <div class="question-item" (click)="chooseQuestion(child.idx)"
+                                                [class.active]="child.selected > -1"
+                                            >
+                                                {{ child.idx }}
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            } @else {
+                                <div class="cursor-pointer relative bg-[var(--color-neutral-95)] hover:bg-[var(--color-neutral-90)] px-4 py-3 mt-4 rounded-2xl"
+                                    (click)="partActive = partIdx"
+                                >
+                                    part {{ partIdx + 1 }}
+                                    <img class="absolute top-1/2 right-4 w-3 -translate-y-1/2" src="/images/icons/ic_down.png" alt="arrow">
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

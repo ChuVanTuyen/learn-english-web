@@ -1,0 +1,66 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@font-face {
+    font-family: inter;
+    src: url('/fonts/inter/Inter-VariableFont_slnt,wght.ttf') format("opentype");
+    font-display: swap;
+}
+@font-face {
+    font-family: Wendy_One;
+    src: url('/fonts/Wendy_One/WendyOne-Regular.ttf') format("opentype");
+    font-display: swap;
+}
+:root {
+    --color-primary: #2C416D;
+    --color-primary-10: #2C416D;
+    --color-primary-20: #42578B;
+    --color-semantic-rhino-90: #E3ECF6;
+    --color-white: #fff;
+    --color-text: #1f1f1f;
+    --color-neutral-95: #F2F2F2;
+    --color-neutral-90: #E5E5E5;
+    --color-neutral-45: #595959;
+    --bg-primary: #f0f1f5;
+    --bg-btn-active: #E3ECF6;
+    --surface-neutral-primary: #F2F2F2;
+    --color-success: #0F8C66;
+    --color-success-hover: #1BA77A;
+    --color-semantic-emerald-100: #EDFCF5;
+    --color-fail: #CD3535;
+    --color-fail-hover: #DF4444;
+    --color-semantic-valencia-100: #FDF3F3;
+    --color-warn: #FFC53D;
+    --color-warn-hover: #FFD666;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+body {
+    font-family: inter;
+    background-color: var(--bg-primary);
+    -webkit-font-smoothing: antialiased; /* Chrome, Safari */
+    -moz-osx-font-smoothing: grayscale;  /* Firefox on macOS */
+    color: #1f1f1f;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+.logo {
+    white-space: nowrap;
+    overflow: hidden;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: Wendy_One;
+}
+@media (width >= 96rem) {
+    .container {
+        max-width: 86rem;
+    }
+}
+
+@media screen and (max-width: 767.98px) {
+    .container {
+        max-width: 100%;
+    }
+}

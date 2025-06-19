@@ -1,0 +1,6 @@
+<div class="app-modal" [class.priority-top]="isPriority" #modalElm>
+    <div class="app-modal-body">
+        <ng-content></ng-content>
+    </div>
+</div> 
+<div class="app-modal-background" [class]="{priority: isPriority, blur: isBlur}"></div>

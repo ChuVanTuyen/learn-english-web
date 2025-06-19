@@ -1,0 +1,17 @@
+<div class="max-w-[500px] w-[90%] mx-auto bg-white rounded-2xl mt-10 p-6">
+    <router-outlet></router-outlet>
+    <app-login-social />
+    <div class="flex items-center justify-center mt-5 border-t border-t-[var(--color-neutral-95)] pt-6">
+        @if(this.isLogin) {
+            <div class="me-3 text-[var(--color-neutral-45)]">Bạn chưa có tài khoản?</div>
+            <a class="cursor-pointer select-none font-medium text-[var(--color-primary)]" routerLink="/auth/register">
+                Đăng ký
+            </a>
+        } @else {
+            <div class="me-3 text-[var(--color-neutral-45)]">Bạn đã có tài khoản?</div>
+            <a class="cursor-pointer select-none font-medium text-[var(--color-primary)]" routerLink="/auth/login">
+                Đăng nhập
+            </a>
+        }
+    </div>
+</div>

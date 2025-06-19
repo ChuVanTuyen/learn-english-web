@@ -1,0 +1,6 @@
+.text{
+    display: inline-block;
+}
+.child-text.pd-cust {
+    padding-right: .25rem;
+}

@@ -1,0 +1,45 @@
+@let dResultSuggest = resultSuggest();
+@let dActive = active();
+@let dQuery = query();
+<div class="container mx-auto min-h-[76vh]">
+
+    <div class="sticky z-10 bg-[linear-gradient(180deg,#f0f1f5_79.08%,#f0f1f500)] top-0 max-w-[650px] mx-auto mt-4">
+        <img class="z-[3] absolute left-5 -translate-y-2/4 top-2/4" width="24" height="24" src="/images/icons/ic_search.png" alt="Search">
+        <input
+            [ngModel]="dQuery"
+            (ngModelChange)="onInputChange($event)"
+            (keyup.enter)="openSearch(dActive > - 1 && dResultSuggest ? dResultSuggest[dActive].word : dQuery)"
+            (keyup.arrowDown)="incActive()"
+            (keyup.arrowUp)="decActive()"
+            class="z-[2] relative text-lg w-full h-full bg-white border pl-[52px] pr-[170px] py-5 border-solid border-[#82AFD8] rounded-full placeholder-gray-400" 
+            type="text"
+            placeholder="Tra cứu từ vựng tiếng Anh"
+        />
+
+        <div class="z-[3] absolute flex right-5 -translate-y-2/4 top-2/4 items-center justify-between w-[56px]">
+            <img width="20" height="20" src="/images/icons/ic_close.png" alt="Close" title="Xóa" (click)="onInputChange('')">
+            <img width="24" height="24" src="/images/icons/ic_micro.png" alt="Micro" title="Nhập văn bản bằng giọng nói">
+        </div>
+
+        @if(dResultSuggest && dResultSuggest.length > 0) {
+            <div class="z-[1] pt-10 shadow-[0_8px_8px_4px_#00000014] px-3 pb-3 top-8 bg-white absolute rounded-br-3xl rounded-bl-3xl w-full">
+                <div class="overflow-y-auto max-h-[350px]">
+                    @for (item of dResultSuggest; track $index) {
+                        <div
+                            class="p-4 text-ellipsis whitespace-nowrap hover:bg-[#f2f2f2] rounded-md overflow-hidden text-lg leading-6 cursor-pointer"
+                            [class.bg-[#f2f2f2]]="dActive === $index"
+                            (click)="openSearch(item.word)"
+                        >
+                            <span>{{ item.word }} [{{ item.pronounce }}]</span>
+                            @if(item.content[0].kind_content[0].means) {
+                                <div class="font-medium">{{ item.content[0].kind_content[0].means }}</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <router-outlet></router-outlet>
+</div>

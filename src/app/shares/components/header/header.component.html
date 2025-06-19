@@ -1,0 +1,51 @@
+<header class="container mx-auto box-header">
+    <a class="logo text-[var(--color-primary)] text-[28px] flex items-center" [routerLink]="'/'">EFaster</a>
+    <div class="header-menu flex items-center justify-center" [class.active]="menuMbActive" (click)="menuMbActive = false">
+        <a class="header-link flex items-center" [routerLink]="'/dictionary'" routerLinkActive="active">
+            <img class="me-1 icon" width="18" src="/images/icons/ic_dictionary.png" alt="Từ điển">
+            Từ điển
+        </a>
+        <a class="header-link flex items-center" [routerLink]="'/note'" routerLinkActive="active">
+            <img class="me-1 icon" width="18" src="/images/icons/ic_notebook.png" alt="Sổ tay">
+            Sổ tay
+        </a>
+        <a class="header-link flex items-center" [routerLink]="'/practice'" routerLinkActive="active">
+            <img class="me-1 icon" width="18" src="/images/icons/ic_practice.png" alt="Luyện tập">
+            Luyện tập
+        </a>
+        <a class="header-link flex items-center" [routerLink]="'/exam'" routerLinkActive="active">
+            <img class="me-1 icon" width="18" src="/images/icons/ic_exam.png" alt="Thi thử">
+            Thi thử
+        </a>
+    </div>
+    <div class="title-page-mb content-center">
+        @switch (currentUrl) {
+            @case ('/exam') {
+                Thi thử
+            }
+            @default {
+                Trang chủ
+            }
+        }
+    </div>
+    <div class="header-auth flex justify-end">
+        @if(commonService.user$ | async; as user) {
+            <div class="flex items-center relative box-user">
+                <span class="text-name">{{ user.name }}</span>
+                <img class="ms-2 user-avatar" width="36" height="36" [src]="user.avatar ? user.avatar : '/images/icons/ic_avatar.png'" alt="avatar">
+                <div class="absolute cursor-pointer items-center btn-logout bg-white w-max px-3 py-1 rounded-lg top-[99%]">
+                    <span>Đăng xuất</span>
+                </div>
+            </div>
+        } @else {
+            <a class="btn login" routerLink="/auth/login">Đăng nhập</a>
+            <a class="btn register" routerLink="/auth/register">Đăng ký</a>
+        }
+        <div class="box-auth box-menu content-center me-2" (click)="menuMbActive = !menuMbActive">
+            <img src="/images/icons/ic_menu.png" alt="Menu">
+        </div>
+        <div class="box-auth content-center">
+            <img src="/images/icons/ic_user.png" alt="Tài khoản">
+        </div>
+    </div>
+</header>

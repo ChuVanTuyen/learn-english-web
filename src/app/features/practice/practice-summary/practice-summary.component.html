@@ -1,0 +1,48 @@
+<div class="min-h-[80vh] container mx-auto grid grid-cols-2 gap-4 mt-8">
+    <div class="bg-white rounded-md p-6 flex flex-col justify-between">
+        <div>
+            <div>TOEIC Listening Part 1 là nội dung nhìn tranh và miêu tả. </div>
+            <div>Phần này gồm 10 bức tranh (đề mới: 6 bức tranh), mỗi bức tranh sẽ có 4 câu mô tả không được in trong đề.</div>
+            <div>Nhiệm vụ của các bạn là nghe và chọn đáp án mô tả đúng bức tranh nhất.</div>
+        </div>
+        <div class="flex justify-center">
+            <button class="btn-primary mr-3">Bắt đầu</button>
+            <button class="btn-danger">Làm lại câu sai</button>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
+            <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">Hoàn thành</span>
+            <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_total.png" alt="Correct">
+            <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
+            <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                <div class="h-full w-3/5 bg-[var(--color-primary)]"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
+            <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">Tỉ lệ đúng</span>
+            <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_correct_total.png" alt="Correct">
+            <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
+            <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                <div class="h-full w-3/5 bg-[var(--color-success)]"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-md col-span-2 p-4">
+            <div class="font-semibold text-lg mb-4">Lịch sử luyện tập</div>
+            <div class="max-h-[280px] overflow-hidden">
+                <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+            </div>
+            <div class="mx-auto w-max">
+                <div class="mt-5 w-max">
+                    <span class="w-6 h-3 bg-[var(--color-success)] inline-block"></span>
+                    &nbsp;Tỷ lệ số câu đúng
+                </div>
+                <div class="w-max">
+                    <span class="w-6 h-3 bg-[var(--color-fail)] inline-block"></span>
+                    &nbsp;Thời gian làm bài
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

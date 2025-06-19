@@ -1,0 +1,46 @@
+.btn-answer {
+    border: 1px solid var(--color-neutral-95);
+    background-color: var(--color-neutral-95);
+    border-radius: 16px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+}
+.btn-answer:hover {
+    background-color: var(--color-neutral-90);
+}
+.question-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 600;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-neutral-90);
+    background-color: var(--color-neutral-90);
+}
+.question-item.active {
+    border: 1px solid var(--color-primary);
+    background-color: var(--color-semantic-rhino-90);
+}
+.btn-answer.active, .btn-answer.active, .question-item.active {
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--color-semantic-rhino-90);
+    font-weight: 600;
+}
+.btn-answer.success, .question-item.success {
+    color: var(--color-success);
+    background-color: var(--color-semantic-emerald-100);
+}
+.btn-answer.active.success, .question-item.active.success {
+    border-color: var(--color-success);
+}
+.btn-answer.fail, .question-item.fail {
+    color: var(--color-fail);
+    background-color: var(--color-semantic-valencia-100);
+}
+.btn-answer.active.fail, .question-item.active.fail {
+    border-color: var(--color-fail);
+}

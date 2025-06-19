@@ -1,0 +1,7 @@
+.menu-item-active {
+    border-left: 4px solid #2C416D;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 2px 0 0 2px;
+    background: linear-gradient(90deg, #42578b, #42578b00);
+}

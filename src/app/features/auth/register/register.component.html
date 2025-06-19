@@ -1,0 +1,55 @@
+<div class="font-semibold text-xl text-center">Đăng ký</div>
+<form [formGroup]="dataRegister">
+    <label class="font-medium">Tên của bạn</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_name.png" alt="Name">
+        <input #inputElement class="outline-none grow" type="text" formControlName="name" (keydown.enter)="handleEnter(0, $event)" />
+    </div>
+    <label class="block font-medium mt-5">*Email</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_mail.png" alt="Email">
+        <input #inputElement class="outline-none grow" type="text" formControlName="email" (keydown.enter)="handleEnter(1, $event)" />
+    </div>
+    @if (submitted && dataRegister.controls['email'].errors) {
+        @if (dataRegister.controls['email'].errors['required']) {
+            <div class="text-xs text-[var(--color-fail)] mt-1">Không được để trống trường này</div>
+        }
+        @if (dataRegister.controls['email'].errors['email']) {
+            <div class="text-xs text-[var(--color-fail)] mt-1">Email không đúng định dạng</div>
+        }
+    }
+    <label class="block mt-5 font-medium">*Mật khẩu</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_padlock.png" alt="Password">
+        <input #inputElement class="outline-none grow" [type]="showPass ? 'text' : 'password'" formControlName="password" (keydown.enter)="handleEnter(2, $event)" />
+        <img class="w-[18px]" (click)="showPass = !showPass" src="/images/icons/ic_{{ showPass ? 'hidden' : 'eye' }}.png" alt="icon">
+    </div>
+    @if (submitted && dataRegister.controls['password'].errors) {
+        @if (dataRegister.controls['password'].errors['required']) {
+            <div class="text-xs text-[var(--color-fail)] mt-1">Không được được để trống trường này</div>
+        }
+        @if (dataRegister.controls['password'].errors['minlength']) {
+            <div class="text-xs text-[var(--color-fail)] mt-1">Mật khẩu không được ít hơn 6 ký tự</div>
+        }
+    }
+    <label class="block mt-5 font-medium">*Nhập lại mật khẩu</label>
+    <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
+        <img class="w-[18px] mr-2" src="/images/icons/ic_padlock.png" alt="Password">
+        <input #inputElement class="outline-none grow" [type]="showRePass ? 'text' : 'password'" formControlName="password" (keydown.enter)="handleEnter(3, $event)" />
+        <img class="w-[18px]" (click)="showRePass = !showRePass" src="/images/icons/ic_{{ showRePass ? 'hidden' : 'eye' }}.png" alt="icon">
+    </div>
+    @if (submitted) {
+        @if(dataRegister.controls['rePassword'].errors) {
+            @if (dataRegister.controls['rePassword'].errors['required']) {
+                <div class="text-xs text-[var(--color-fail)] mt-1">Không được để trống trường này</div>
+            }
+            @if (dataRegister.controls['rePassword'].errors['minlength']) {
+                <div class="text-xs text-[var(--color-fail)] mt-1">Mật khẩu không được ít hơn 6 ký tự</div>
+            }
+        } @else if (dataRegister.value.password !== dataRegister.value.rePassword) {
+            <div class="text-xs text-[var(--color-fail)] mt-1">Mật khẩu không khớp</div>
+        }
+    }
+</form>
+<div class="btn-primary w-full text-center mt-5">Đăng ký</div>
+<div class="text-center my-3">Hoặc</div>

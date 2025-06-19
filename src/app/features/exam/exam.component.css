@@ -1,0 +1,68 @@
+.struct-skill, .struct-part {
+    border-radius: 15px;
+    padding: 12px 16px;
+    text-align: center;
+}
+.struct-skill {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: 500;
+    width: 120px;
+}
+.struct-part {
+    background-color: var(--color-white);
+}
+.struct-skill-cont {
+    margin-left: 75px;
+    padding: 1px 0;
+}
+.struct-line {
+    width: 3px;
+    top: -1px;
+    bottom: -1px;
+    left: -17px;
+    z-index: 0;
+    background-color: var(--color-primary);
+    border-radius: 3px;
+}
+.struct-time {
+    left: -58px;
+    top: calc(50% - 10px);
+}
+.mt-40px {
+    margin-top: 40px;
+}
+.list-test {
+    padding: 8px;
+    border-radius: 12px;
+    background-color: var(--color-white);
+}
+.test-item {
+    background-color: var(--color-neutral-95);
+    border-radius: 20px;
+    height: 150px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.font-cursive {
+    font-family: cursive, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    top: 2px;
+    right: 12px;
+    color: #e5e5e5;
+}
+.box-infor-test {
+    justify-content: space-between;
+    align-items: end;
+}
+.infor-test {
+    color: var(--color-neutral-45);
+}
+.icon-history {
+    top: 12px;
+    right: 12px;
+    width: 24px;
+}

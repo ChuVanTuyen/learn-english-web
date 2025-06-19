@@ -1,0 +1,54 @@
+<div class="container mx-auto grid grid-cols-3 gap-3">
+    <div>
+        <h4 class="my-3 font-semibold">Cấu trúc đề thi</h4>
+        <div class="struct-skill">Nghe hiểu</div>
+        <div class="struct-skill-cont relative">
+            <div class="struct-line absolute"></div>
+            <div class="struct-time absolute">45'</div>
+            <div class="struct-part my-3">Mô tả tranh</div>
+            <div class="struct-part my-3">Hỏi và Trả lời</div>
+            <div class="struct-part my-3">Hội thoại</div>
+            <div class="struct-part my-3">Đoạn thông tin ngắn</div>
+        </div>
+        <div class="struct-skill">Đọc hiểu</div>
+        <div class="struct-skill-cont relative">
+            <div class="struct-line absolute"></div>
+            <div class="struct-time absolute">75'</div>
+            <div class="struct-part my-3">Hoàn thành câu</div>
+            <div class="struct-part my-3">Hoàn thành đoạn văn</div>
+            <div class="struct-part my-3">Đoạn văn đơn & Nhóm đoạn văn</div>
+        </div>
+    </div>
+    <div class="col-span-2 mt-40px grid gap-3 grid-cols-3 list-test">
+        @for (test of listTest; track $index) {
+            <div class="test-item relative">
+                <div class="font-medium">{{ test.name }}</div>
+                @if(true) {
+                    <div class="font-cursive absolute">TOEIC</div>
+                    <div class="flex box-infor-test">
+                        <div class="infor-test">
+                            <div>200 câu</div>
+                            <div class="mt-2">120 phút</div>
+                            <div class="mt-2">Nghe & đọc</div>
+                        </div>
+                        <a class="btn-primary w-max" routerLink="/exam/detail/{{test.id}}">Bắt đầu</a>
+                    </div>
+                } @else {
+                    <img class="icon-history absolute" src="/images/icons/ic_history.png" alt="lịch sử">
+                    <div class="infor-progress">
+                        <div class="content-between">
+                            <span class="txt-gray">Chưa đạt</span>
+                            <div class="fw-600">500/990</div>
+                        </div>
+                        <div class="progress-bar mt-1">
+                            <div class="progress fail" [style.width.%]="25"></div>
+                        </div>                              
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <a class="btn-danger" routerLink="/exam/detail/{{test.id}}">Làm lại</a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,113 @@
+.box-header {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    background-color: var(--color-white);
+    margin-top: 16px;
+    border-radius: 20px;
+    padding: 8px 14px;
+    justify-content: space-between;
+}
+.header-link, .header-auth .btn {
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 12px 16px;
+}
+.header-link {
+    border-radius: 16px;
+}
+.header-link.active {
+    background-color: var(--bg-btn-active);
+    font-weight: 500;
+    color: var(--color-primary);
+}
+.header-link .icon {
+    display: none;
+}
+.header-link.active .icon {
+    display: block;
+}
+.header-auth .btn {
+    border-radius: 99px;
+}
+.header-auth .login {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: 500;
+}
+.box-auth {
+    display: none;
+}
+.box-auth > img {
+    width: 20px;
+}
+@media screen and (max-width: 1199.98px) {
+    .header-auth .btn {
+        display: none;
+    }
+    .box-auth {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        background-color: var(--surface-neutral-primary);
+        border-radius: 50%;
+    }
+    .box-menu {
+        display: none;
+    }
+}
+.title-page-mb {
+    display: none;
+}
+.btn-logout {
+    display: none;
+    box-shadow: 0 0 11px #80838d2b;
+    color: var(--color-red-600);
+}
+.box-user:hover .btn-logout {
+    display: flex;
+}
+@media screen and (max-width: 683px) {
+    .box-header {
+        display: flex;
+        position: relative;
+        z-index: 9;
+        margin-top: 8px;
+    }
+    .logo {
+        font-size: 22px;
+    }
+    .header-menu {
+        display: block;
+        position: absolute;
+        background-color: var(--color-white);
+        width: 100%;
+        left: 0;
+        top: 55%;
+        padding: 0 12px 12px;
+        z-index: -1;
+        border-radius: 0 0 16px 16px;
+        max-height: 0vh;
+        overflow: hidden;
+        transition: all 0.5s linear;
+    }
+    .header-menu.active {
+        max-height: 65vh;
+        padding: 24px 12px 12px;
+    }
+    .header-link {
+        padding: 12px;
+    }
+    .box-menu {
+        display: flex;
+    }
+    .box-auth {
+        width: 32px;
+        height: 32px;
+    }
+    .box-auth > img {
+        width: 18px;
+    }
+    .title-page-mb {
+        display: flex;
+    }
+}

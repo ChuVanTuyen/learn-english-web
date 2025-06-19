@@ -1,0 +1,140 @@
+@let dDetail = detail();
+@let dAutoTrans = autoTrans();
+@let dResult = results();
+<div class="container mx-auto min-h-[76vh] grid grid-cols-12 gap-4 mt-6">
+    <div class="col-span-2">
+        <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border py-4 rounded-3xl border-solid border-[#f2f2f2] lowercase">
+            <div class="py-1 pl-3 mb-2 cursor-pointer">Từ vựng</div>
+            @if(dDetail) {
+                @for (kind of dDetail.content; track kindIdx; let kindIdx = $index) {
+                    <div class="py-1 pl-3 mb-2 cursor-pointer {{ active() === kindIdx ? 'menu-item-active' : '' }}" (click)="active.set($index)">
+                        {{ kind.kind }}
+                    </div>
+                }
+                @if(dDetail.synonyms && dDetail.synonyms.length) {
+                    <div class="py-1 pl-3 cursor-pointer">Đồng nghĩa</div>
+                }
+                @if(dDetail.antonyms && dDetail.antonyms.length) {
+                    <div class="py-1 pl-3 mt-3 cursor-pointer">Trái nghĩa</div>
+                }
+            }
+            <div class="py-1 pl-3 mt-2 cursor-pointer">Góp ý</div>
+            <div class="py-1 pl-3 mt-2 cursor-pointer">Báo lỗi</div>
+        </div>
+    </div>
+    <div class="col-span-7">
+        @if(dDetail) {
+            <ng-container [ngTemplateOutlet]="ngShowWord" [ngTemplateOutletContext]="{ 
+                word: dDetail.word,
+                pronounce: dDetail.word
+            }">
+            </ng-container>
+        } @else {
+            @if(dAutoTrans) {
+                <ng-container [ngTemplateOutlet]="ngShowWord" [ngTemplateOutletContext]="{ 
+                    word: dAutoTrans.origin,
+                    pronounce: dAutoTrans.pronounce,
+                    mean: dAutoTrans.mean
+                }">
+                </ng-container>
+            }
+        }
+        <ng-template #ngShowWord let-word="word" let-pronounce="pronounce" let-mean="mean">
+            <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2]">
+                <div class="flex items-center">
+                    <h1 class="text-[26px] text-[#CD3535]">{{ word }}</h1>
+                    <img class="w-6 h-6 ml-3" src="/images/icons/ic_speaker.svg" alt="Voice" (click)="audioService.playAudio(word)">
+                </div>
+                <div class="text-[#595959] text-lg leading-6">
+                    [ {{ pronounce }} ]
+                </div>
+                @if(mean) {
+                    <div class="mt-3 pt-3 border-t-[#f2f2f2] border-t border-solid">
+                        {{ mean }}
+                    </div>
+                    <div class="bg-[#F2F2F2] cursor-pointer font-medium rounded-full py-1 px-3 w-max mt-2">
+                        Đóng góp bản dịch
+                    </div>
+                }
+            </div>
+        </ng-template>
+        @if(dDetail) {
+            @for (kind of dDetail.content; track kindIdx; let kindIdx = $index) {
+                <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                    <div class="text-lg font-semibold text-[#2C416D]">{{ kind.kind }}</div>
+                    @for (kindCt of kind.kind_content; track kindCtIdx; let kindCtIdx = $index) {
+                        <div class="font-medium">{{ kindCtIdx + 1 }}. {{ kindCt.means }}</div>
+                        <div class="ml-3 pl-3 border-l-neutral-200 border-l border-solid">
+                            @for (example of kindCt.examples; track exampleIdx; let exampleIdx = $index) {
+                                <div class="flex items-center gap-2 mt-2 ">
+                                    <img class="w-6 h-6" src="/images/icons/ic_speaker.svg" alt="Read" (click)="audioService.playAudio(example.example)">
+                                    <highlight-query [query]="dDetail.word" [data]="example.example" />
+                                </div>
+                                <div class="pl-8 mb-2 text-[#888888]">{{ example.mean }}</div>
+                            }
+                        </div>
+                    }
+
+                    @if(kind.idioms && kind.idioms.length) {
+                        <div class="text-lg font-semibold text-[#2C416D]">Idioms</div>
+                        <ul class="list-disc pl-5">
+                            @for (kindIdiom of kind.idioms; track idiomIdx; let idiomIdx = $index) {
+                                <li class="my-1">
+                                    <div class="font-medium">{{ kindIdiom.idiom }}</div>
+                                    <div class="text-[#212529bf]">{{ kindIdiom.mean }}</div>
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                </div>
+            }
+
+            @if(dDetail.synonyms && dDetail.synonyms.length) {
+                <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                    <div class="text-lg font-semibold text-[#2C416D]">Đồng nghĩa</div>
+                    <div class="flex flex-wrap gap-2">
+                        @for (syn of dDetail.synonyms; track $index) {
+                            <div>{{ syn }}</div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if(dDetail.antonyms && dDetail.antonyms.length) {
+                <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                    <div class="text-lg font-semibold text-[#2C416D]">Trái nghĩa</div>
+                    <div class="flex flex-wrap gap-2">
+                        @for (syn of dDetail.antonyms; track $index) {
+                            <div>{{ syn }}</div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+            <div class="text-lg font-semibold text-[#2C416D]">Hình ảnh</div>
+            <img class="max-w-[474px] mx-auto mt-2" src="https://th.bing.com/th?q={{ query() }}&c=7&rs=1&p=0&o=5&dpr=2&pid=1.7&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1" alt="">
+        </div>
+        <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+            <div class="text-lg font-semibold text-[#2C416D]">Góp ý</div>
+            <textarea></textarea>
+        </div>
+    </div> 
+    @if(dResult.length) {
+        <div class="col-span-3">
+            <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2]">
+                <div class="font-semibold">Các từ gợi ý</div>
+                @for (suggest of dResult; track $index) {
+                    <div class="px-3 py-2 rounded-2xl bg-[#f2f2f2] border border-solid border-[#f2f2f2] mt-3">
+                        <highlight-query [query]="dDetail ? dDetail.word : ''" [data]="suggest.word" />
+                        <div class="text-[#595959]">[ {{ suggest.pronounce }} ]</div>
+                        @if(suggest.content[0] && suggest.content[0].kind_content[0] && suggest.content[0].kind_content[0].means) {
+                            <div class="font-medium">{{ suggest.content[0].kind_content[0].means }}</div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
