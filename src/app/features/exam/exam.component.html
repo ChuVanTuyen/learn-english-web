@@ -1,3 +1,5 @@
+@let listTest = sListTest();
+@let idxHistory = sIdxHistory();
 <div class="container mx-auto grid grid-cols-3 gap-3">
     <div>
         <h4 class="my-3 font-semibold">Cấu trúc đề thi</h4>
@@ -23,7 +25,21 @@
         @for (test of listTest; track $index) {
             <div class="test-item relative">
                 <div class="font-medium">{{ test.name }}</div>
-                @if(true) {
+                @if(test.histories && test.histories.length) {
+                    <img class="icon-history absolute cursor-pointer" src="/images/icons/ic_history.png" alt="lịch sử" (click)="openModalHistory($index)">
+                    <div class="infor-progress">
+                        <div class="content-between">
+                            <span class="txt-gray">Chưa đạt</span>
+                            <div class="fw-600">{{ test.histories[0].score }}/990</div>
+                        </div>
+                        <div class="progress-bar mt-1">
+                            <div class="progress fail" [style.width.%]="25"></div>
+                        </div>                              
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <a class="btn-danger mt-2" routerLink="/exam/detail/{{test.id}}">Làm lại</a>
+                    </div>
+                } @else {
                     <div class="font-cursive absolute">TOEIC</div>
                     <div class="flex box-infor-test">
                         <div class="infor-test">
@@ -33,22 +49,11 @@
                         </div>
                         <a class="btn-primary w-max" routerLink="/exam/detail/{{test.id}}">Bắt đầu</a>
                     </div>
-                } @else {
-                    <img class="icon-history absolute" src="/images/icons/ic_history.png" alt="lịch sử">
-                    <div class="infor-progress">
-                        <div class="content-between">
-                            <span class="txt-gray">Chưa đạt</span>
-                            <div class="fw-600">500/990</div>
-                        </div>
-                        <div class="progress-bar mt-1">
-                            <div class="progress fail" [style.width.%]="25"></div>
-                        </div>                              
-                    </div>
-                    <div class="flex items-center justify-end">
-                        <a class="btn-danger" routerLink="/exam/detail/{{test.id}}">Làm lại</a>
-                    </div>
                 }
             </div>
         }
     </div>
 </div>
+@if(listTest[idxHistory].histories) {
+    <app-modal-histories [histories]="listTest[idxHistory].histories" [examId]="listTest[idxHistory].id" />
+}

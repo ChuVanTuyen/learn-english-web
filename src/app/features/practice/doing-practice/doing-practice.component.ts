@@ -1,15 +1,18 @@
 import { Component, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PracticeService } from '../../../shares/services/practice.service';
 import { ChildQues, Question } from '../../../common/interfaces/exam';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
 import { BASE_URL } from '../../../shares/data/config';
-import { DOCUMENT, JsonPipe } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { HistoryPractice, SummaryPractice } from '../../../common/interfaces/practice';
 
 @Component({
     selector: 'app-doing-practice',
-    imports: [SafePipe],
+    imports: [
+        SafePipe,
+        RouterLink
+    ],
     templateUrl: './doing-practice.component.html',
     styleUrls: [
         '../../../shares/styles/button.css',
@@ -30,9 +33,8 @@ export class DoingPracticeComponent {
     ngOnInit() {
         this.route.paramMap.subscribe(param => {
             this.part = Number(param.get('part'));
-            this.practiceService.getQuestions(this.part, 10).subscribe({
+            this.practiceService.getQuestions(this.part, this.practiceService.numQues).subscribe({
                 next: res => {
-                    console.log(res);
                     this.listQuestion = JSON.parse(JSON.stringify(res));
                     let idx = 0;
                     this.listQuestion.forEach(ques => {

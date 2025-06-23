@@ -1,15 +1,16 @@
 <div class="container mx-auto pb-6">
     <div class="flex justify-between items-center mt-4 mb-3">
-        <div class="flex items-center bg-white rounded-full px-4 py-2">
+        <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/exam">
             <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
             Trở về
-        </div>
-        <div class="text-2xl font-semibold">Đề 1</div>
+        </a>
+        <div class="text-2xl font-semibold">{{ detailTest.name }}</div>
         <div class="flex items-center bg-white rounded-full px-4 py-2">
             Tùy chọn
             <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
         </div>
     </div>
+
     @if(detailTest) {
         <div class="grid grid-cols-4 gap-3">
             <div class="col-span-3">
@@ -23,6 +24,11 @@
                 <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
                     <div>{{ detailTest.skills[skillActive].parts[partActive].title }}</div>
                     @if(partIntros[skillActive * 4 + partActive]) {
+                        @if(partIntros[skillActive * 4 + partActive].audio) {
+                            <div class="w-full h-[38px] mb-2">
+                                <app-audio [audioUrl]="baseUrl + 'public/exam/test' + testId + '/audio/' + partIntros[skillActive * 4 + partActive].audio" [autoPlay]="false" />
+                            </div>
+                        }
                         @if(partIntros[skillActive * 4 + partActive].image) {
                             <img class="block max-w-[390px] mx-auto" [src]="partIntros[skillActive * 4 + partActive].image" alt="Intro">
                         }
@@ -39,8 +45,13 @@
 
                 @for (ques of detailTest.skills[skillActive].parts[partActive].questions; track $index) {
                     <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
+                        @if(ques.audio) {
+                            <div class="w-full h-[38px] mb-2">
+                                <app-audio [audioUrl]="baseUrl + 'public/exam/test' + testId + '/audio/' + ques.audio" [autoPlay]="false" />
+                            </div>
+                        }
                         @if(ques.image) {
-                            <img class="block max-w-[390px] mx-auto" [src]="ques.image" alt="Intro">
+                            <img class="block max-w-[390px] mx-auto" [src]="baseUrl + 'public/exam/test' + testId + '/'  + ques.image" alt="Intro">
                         }
                         @if(ques.text_read) {
                             <div [innerHTML]="ques.text_read | safe:'html'"></div>
@@ -51,7 +62,7 @@
                                 <span [innerHTML]="child.title"></span>
                             </div>
                             @if(child.image) {
-                                <img class="max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
+                                <img class="max-w-[390px] mx-auto" [src]="baseUrl + child.image" [alt]="child.id">
                             }
                             <div class="grid gap-3 grid-cols-2 mt-3">
                                 @for (answer of child.answers; track answer;let ansIdx = $index) {

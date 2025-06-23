@@ -1,0 +1,23 @@
+@if(isClient) {
+    <vg-player class="audio-container">
+        <vg-controls>
+            <vg-play-pause></vg-play-pause>
+            <vg-playback-button></vg-playback-button>
+            <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+            <vg-scrub-bar>
+                <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+            </vg-scrub-bar>
+            <vg-time-display vgProperty="left" vgFormat="mm:ss"></vg-time-display>
+            <vg-mute vgFor="myAudio"></vg-mute>
+            <vg-volume vgFor="myAudio"></vg-volume>
+        </vg-controls>
+        <audio id="myAudio" #ngMyAudio preload="none"
+            [vgMedia]="$any(ngMyAudio)" 
+            [autoplay]="autoPlay"
+            [playbackRate]="speed"
+        >
+            <source [src]="url" type="audio/mp3">
+        </audio>
+    </vg-player>
+}

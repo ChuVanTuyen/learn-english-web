@@ -28,14 +28,12 @@ export class DetailWordComponent {
         private route: ActivatedRoute,
         private dictionaryService: DictionaryService
     ) {
-        // Search when query changes
         effect(() => {
             this.dictionaryService.search(this.query())
                 .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe(res => this.results.set(res));
         });
 
-        // Auto translate if no detail found
         effect(() => {
             if (!this.detail()) {
                 this.dictionaryService.autoTranslate(this.query())

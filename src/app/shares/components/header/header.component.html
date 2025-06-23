@@ -5,7 +5,7 @@
             <img class="me-1 icon" width="18" src="/images/icons/ic_dictionary.png" alt="Từ điển">
             Từ điển
         </a>
-        <a class="header-link flex items-center" [routerLink]="'/note'" routerLinkActive="active">
+        <a class="header-link flex items-center" [routerLink]="'/notebook'" routerLinkActive="active">
             <img class="me-1 icon" width="18" src="/images/icons/ic_notebook.png" alt="Sổ tay">
             Sổ tay
         </a>
@@ -29,11 +29,11 @@
         }
     </div>
     <div class="header-auth flex justify-end">
-        @if(commonService.user$ | async; as user) {
+        @if(commonService.sUser(); as user) {
             <div class="flex items-center relative box-user">
                 <span class="text-name">{{ user.name }}</span>
                 <img class="ms-2 user-avatar" width="36" height="36" [src]="user.avatar ? user.avatar : '/images/icons/ic_avatar.png'" alt="avatar">
-                <div class="absolute cursor-pointer items-center btn-logout bg-white w-max px-3 py-1 rounded-lg top-[99%]">
+                <div class="absolute cursor-pointer items-center btn-logout bg-white w-max px-3 py-1 rounded-lg top-[99%]" (click)="logout()">
                     <span>Đăng xuất</span>
                 </div>
             </div>

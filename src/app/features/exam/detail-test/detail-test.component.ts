@@ -1,17 +1,22 @@
 import { Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TestService } from '../../../shares/services/test.service';
-import { ChildQues, DetailTest, HistoryTest, IntroPart } from '../../../common/interfaces/exam';
+import { ChildQues, DetailTest, IntroPart, SaveHistoryTest } from '../../../common/interfaces/exam';
 import { CommonService } from '../../../shares/services/common.service';
 import { DOCUMENT } from '@angular/common';
-import { convertScore, partIntros } from '../../../shares/data/toeic';
+import { ConvertListenScore, ConvertReadScore, partIntros } from '../../../shares/data/toeic';
 import { ObjectKey } from '../../../common/interfaces/common';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
-import { BASE_URL } from '../../../shares/data/config';
+import { BASE_URL_PUBLIC } from '../../../shares/data/config';
+import { AudioComponent } from "../../../shares/components/audio/audio.component";
 
 @Component({
     selector: 'app-detail-test',
-    imports: [SafePipe],
+    imports: [
+        SafePipe, 
+        AudioComponent,
+        RouterLink
+    ],
     templateUrl: './detail-test.component.html',
     styleUrls: ['../../../shares/styles/button.css', './detail-test.component.css']
 })
@@ -25,6 +30,7 @@ export class DetailTestComponent {
     partActive: number = 0;
     quesActive: number = 0;
 
+    baseUrl: string = BASE_URL_PUBLIC;
     partIntros: ObjectKey<IntroPart> = partIntros;
 
     constructor(
@@ -62,7 +68,7 @@ export class DetailTestComponent {
             skill.parts.forEach(part => {
                 part.questions.forEach(ques => {
                     if (ques.text_read.includes('src=')) {
-                        ques.text_read = this.addDomain(ques.text_read, BASE_URL);
+                        ques.text_read = this.addDomain(ques.text_read, this.baseUrl);
                     }
                     ques.child_ques.forEach(child => {
                         idx++;
@@ -102,18 +108,18 @@ export class DetailTestComponent {
     }
 
     submit() {
-        let result: HistoryTest = {
-            detail: {},
+        let result: SaveHistoryTest = {
+            content: {},
             correct_listen: 0,
             correct_read: 0,
             score: 0,
-            total_time: 0
+            time: 0
         }
         this.detailTest!.skills.forEach((skill, skillIdx) => {
             skill.parts.forEach(part => {
                 part.questions.forEach(ques => {
                     ques.child_ques.forEach(child => {
-                        result.detail[child.id] = child.selected;
+                        result.content[child.id] = child.selected;
                         if (child.isCorrect) {
                             if (skillIdx) {
                                 result.correct_read++;
@@ -125,8 +131,14 @@ export class DetailTestComponent {
                 })
             })
         })
-        result.score = convertScore[result.correct_listen].listen + convertScore[result.correct_read].read;
-        console.log(result);
+        result.score = ConvertListenScore[result.correct_listen] + ConvertReadScore[result.correct_read];
+
+        this.testService.saveHistoryExam(result, this.detailTest.id).subscribe({
+            next: res => {
+                console.log(res);
+                this.commonService.showNotify('Nộp bài thành công', 'success');
+            }
+        });
     }
 
     addDomain(html: string, domain: string) {

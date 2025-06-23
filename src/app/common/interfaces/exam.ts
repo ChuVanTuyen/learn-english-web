@@ -4,7 +4,8 @@ export interface Test {
     id: number,
     name: string,
     time: number,
-    type: string
+    type: string,
+    histories?: HistoryTest[];
 }
 
 export interface DetailTest {
@@ -70,10 +71,16 @@ export interface ChildQues {
     idx: number
 }
 
-export interface HistoryTest {
-    detail: ObjectKey<number>;
+export interface SaveHistoryTest {
+    content: ObjectKey<number>;
     correct_listen: number;
     correct_read: number;
     score: number;
-    total_time: number;
+    time: number;
+    created_at?: string;
+}
+
+export interface HistoryTest extends SaveHistoryTest {
+    id: number;
+    created_at: string;
 }

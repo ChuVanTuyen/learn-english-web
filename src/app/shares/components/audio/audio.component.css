@@ -1,0 +1,40 @@
+.audio-container {
+    border-radius: 99px;
+}
+
+:host ::ng-deep vg-controls {
+    padding-right: 25px;
+    font-size: 14px;
+    height: 40px;
+    background-color: #2c416d;
+}
+
+:host ::ng-deep vg-controls vg-play-pause,
+vg-playback-button,
+vg-scrub-bar,
+vg-time-display,
+vg-mute,
+vg-volume {
+    height: 40px;
+    align-items: center;
+}
+
+:host ::ng-deep vg-controls vg-scrub-bar-current-time {
+    background-color: #FFF;
+    border: none;
+    border-radius: 2px;
+}
+
+:host ::ng-deep vg-controls vg-scrub-bar-current-time .background {
+    background-color: #FFD150;
+    border: 1px solid #FFD150;
+    border-radius: 2px;
+}
+
+:host ::ng-deep vg-controls vg-volume {
+    width: 50px;
+}
+
+:host ::ng-deep vg-controls vg-time-display {
+    width: auto;
+}

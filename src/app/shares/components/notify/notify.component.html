@@ -1,0 +1,11 @@
+<div class="alert flex items-center justify-between ps-4 {{ type }} {{ content ? 'show' : 'hide' }}">
+    <div class="flex items-center">
+        @if(type) {
+            <img width="22" src="/images/icons/ic_noti_{{ type }}.png" [alt]="type">
+        }
+        <div class="msg py-3 ms-3">{{ content }}</div>
+    </div>
+    <div class="cursor-pointer p-3 content-center" (click)="close()">
+        <img width="16" src="/images/icons/ic_close.png" alt="close">
+    </div>
+ </div>

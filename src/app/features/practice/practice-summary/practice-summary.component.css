@@ -1,0 +1,38 @@
+.setting-item-child {
+    height: 2.375rem;
+    width: 4.5rem;
+    background-color: #fff;
+    border-radius: 99px;
+}
+.setting-toggle {
+    cursor: pointer;
+    position: relative;
+}
+.setting-toggle .setting-toggle-btn {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    background-color: #BDBDBD;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+.setting-toggle.active .setting-toggle-btn {
+    left: auto;
+    left: 2.5rem;
+    background-color: var(--color-primary);
+}
+
+.setting-item-select {
+    font-size: 1rem;
+    height: 2.375rem;
+    width: 5.5rem;
+    background-color: #fff;
+    border-radius: 99px;
+    border-top: none;
+    border-bottom: none;
+    border-left: calc(32px - 1rem) solid #fff;
+    border-right: calc(32px - 1rem) solid #fff;
+}

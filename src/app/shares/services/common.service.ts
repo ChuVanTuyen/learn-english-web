@@ -1,4 +1,4 @@
-import { afterNextRender, ElementRef, Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { afterNextRender, effect, ElementRef, Inject, Injectable, LOCALE_ID, signal, WritableSignal } from '@angular/core';
 import { BroadcasterService } from './broadcaster.service';
 import { ModalService } from './modal.service';
 import { HttpClient } from '@angular/common/http';
@@ -12,9 +12,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class CommonService {
 
-    user: InforUser | undefined;
-    userSubject = new BehaviorSubject<InforUser | undefined>(undefined);
-    user$: Observable<InforUser | undefined> = this.userSubject.asObservable();
+    sUser: WritableSignal<InforUser | undefined> = signal(undefined);
 
     environment: string = 'server';
     countryCode: string = '';
@@ -29,8 +27,7 @@ export class CommonService {
     ) { 
         afterNextRender(() => {
             this.environment = 'client';
-            this.user = this.getLocal('userInfor');
-            this.userSubject.next(this.user);
+            this.sUser.set(this.getLocal('userInfor'));
         });
     }
 
@@ -128,5 +125,10 @@ export class CommonService {
 
     clearDataCache() {
         this.dataCache = {};
+    }
+
+    clearInforUser() {
+        this.removeLocal('userInfor');
+        this.sUser.set(undefined);
     }
 }

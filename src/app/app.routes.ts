@@ -3,11 +3,16 @@ import { ExamRoutes } from './features/exam/exam.routes';
 import { AuthRoutes } from './features/auth/auth.routes';
 import { PracticeRoutes } from './features/practice/practice.routes';
 import { DictionaryRoutes } from './features/dictionary/dictionary.routes';
+import { NotebookRoutes } from './features/note/note.routes';
 
 export const routes: Routes = [
     { 
         path: 'dictionary', 
         children: DictionaryRoutes
+    },
+    { 
+        path: 'notebook', 
+        children: NotebookRoutes
     },
     { 
         path: 'practice', 
@@ -22,7 +27,8 @@ export const routes: Routes = [
         children: ExamRoutes
     },
     { 
-        path: '', 
-        loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent), 
+        path: '',
+        redirectTo: 'dictionary', 
+        pathMatch: 'full'
     },
 ];

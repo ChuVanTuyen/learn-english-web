@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { PracticeService } from '../../../shares/services/practice.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-practice-summary',
     imports: [
-        CanvasJSAngularChartsModule
+        CanvasJSAngularChartsModule,
+        FormsModule,
+        RouterLink
     ],
     templateUrl: './practice-summary.component.html',
     styleUrls: ['../../../shares/styles/button.css', './practice-summary.component.css']
@@ -71,16 +75,38 @@ export class PracticeSummaryComponent {
         ]
     };
 
+    averageTime = [ 30, 20, 81, 102, 20, 90, 185 ];
+
     part: number = 1;
+    arrNum1 = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+    arrNum2 = [1, 2, 3, 4, 5];
+    arrNumQues: number[][] = [
+        this.arrNum1,
+        this.arrNum1,
+        this.arrNum2,
+        this.arrNum2,
+        this.arrNum1,
+        this.arrNum2,
+        this.arrNum2,
+    ];
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        protected readonly practiceService: PracticeService
     ) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(param => {
-            const part = Number(param.get('part'));
+            this.part = Number(param.get('part'));
         })
+    }
+
+    toggleCheck() {
+        this.practiceService.testMode = !this.practiceService.testMode;
+    }
+    
+    toggleAutoNext() {
+        this.practiceService.autoNext = !this.practiceService.autoNext;
     }
 }

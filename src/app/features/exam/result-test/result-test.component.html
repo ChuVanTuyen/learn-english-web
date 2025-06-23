@@ -1,10 +1,12 @@
 <div class="container mx-auto pb-6">
     <div class="flex justify-between items-center mt-4 mb-3">
-        <div class="flex items-center bg-white rounded-full px-4 py-2">
+        <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/exam">
             <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
             Trở về
-        </div>
-        <div class="text-2xl font-semibold">Đề 1</div>
+        </a>
+        @if(detailTest) {
+            <div class="text-2xl font-semibold">{{ detailTest.name }}</div>
+        }
         <div class="flex items-center bg-white rounded-full px-4 py-2">
             Tùy chọn
             <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
@@ -46,7 +48,7 @@
                                     <img class="block max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + ques.image" alt="Intro">
                                 }
                                 @if(ques.text_read) {
-                                    <div [innerHTML]="ques.text_read"></div>
+                                    <div [innerHTML]="ques.text_read | safe:'html'"></div>
                                 }
                                 @for (child of ques.child_ques; track child;let childIdx = $index) {
                                     <div id="ques-{{ child.idx }}" [class.mt-5]="childIdx > 0">

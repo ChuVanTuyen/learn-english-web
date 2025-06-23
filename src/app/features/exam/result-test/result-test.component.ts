@@ -1,15 +1,20 @@
 import { Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { zip } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { TestService } from '../../../shares/services/test.service';
 import { DetailTest, HistoryTest, IntroPart } from '../../../common/interfaces/exam';
 import { partIntros } from '../../../shares/data/toeic';
 import { ObjectKey } from '../../../common/interfaces/common';
+import { SafePipe } from "../../../common/pipes/safe.pipe";
+import { BASE_URL_PUBLIC } from '../../../shares/data/config';
 
 @Component({
     selector: 'app-result-test',
-    imports: [],
+    imports: [
+        SafePipe,
+        RouterLink
+    ],
     templateUrl: './result-test.component.html',
     styleUrls: ['../detail-test/detail-test.component.css', './result-test.component.css']
 })
@@ -21,6 +26,7 @@ export class ResultTestComponent {
     detailTest!: DetailTest;
     history!: HistoryTest;
     partIntros: ObjectKey<IntroPart> = partIntros;
+    baseUrl: string = BASE_URL_PUBLIC;
 
     constructor(
         private router: Router,
@@ -45,6 +51,7 @@ export class ResultTestComponent {
                         this.loading = false;
                         this.detailTest = resTest;
                         this.history = resHistory;
+                        console.log(resHistory);
                         this.handleHistory();
                     }
                 });
@@ -61,11 +68,11 @@ export class ResultTestComponent {
             skill.parts.forEach(part => {
                 part.questions.forEach(ques => {
                     if (ques.text_read.includes('src=')) {
-                        ques.text_read = this.addDomain(ques.text_read, 'http://localhost:3000/public/exam/test' + this.testId + '/image/');
+                        ques.text_read = this.addDomain(ques.text_read, this.baseUrl);
                     }
                     ques.child_ques.forEach(child => {
                         child.idx = ++idx;
-                        child.selected = this.history.detail[child.id];
+                        child.selected = this.history.content[child.id];
                         child.isCorrect = child.selected === child.correct_answer;
                     });
                 })

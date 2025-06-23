@@ -8,6 +8,11 @@ import { Question } from '../../common/interfaces/exam';
 })
 export class PracticeService {
 
+    autoNext = false;
+    testMode = false;
+    numQues = 10;
+    time: number = 0; // thời gian làm luyện tập
+
     constructor(
         private http: HttpClient
     ) { }

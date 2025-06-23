@@ -3,42 +3,43 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shares/components/header/header.component';
 import { FooterComponent } from "./shares/components/footer/footer.component";
 import { CommonService } from './shares/services/common.service';
+import { NotifyComponent } from "./shares/components/notify/notify.component";
 
 @Component({
-  selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent
-],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        NotifyComponent
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
-  
-  url: string = '';
-  timeTest: boolean = false;
 
-  constructor(
-    private commonService: CommonService,
-    private router: Router
-  ) {}
+    url: string = '';
+    timeTest: boolean = false;
 
-  ngOnInit() {
-    console.log(this.commonService.user);
-    this.router.events.subscribe(val => {
-      if (val instanceof NavigationEnd) {
-        this.url = val.url;
-        this.handleUrls();
-      }
-    });
-  }
+    constructor(
+        private commonService: CommonService,
+        private router: Router
+    ) { }
 
-  test() {
-    this.commonService.openModal('modal-test');
-  }
+    ngOnInit() {
+        this.router.events.subscribe(val => {
+            if (val instanceof NavigationEnd) {
+                this.url = val.url;
+                this.handleUrls();
+            }
+        });
+    }
 
-  handleUrls() {
-		this.timeTest = this.url.includes('exam/detail') || this.url.includes('doing');
-	}
+    test() {
+        this.commonService.openModal('modal-test');
+    }
+
+    handleUrls() {
+        this.timeTest = this.url.includes('exam/detail') || this.url.includes('doing');
+    }
 }

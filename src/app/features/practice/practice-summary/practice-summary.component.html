@@ -1,18 +1,43 @@
 <div class="min-h-[80vh] container mx-auto grid grid-cols-2 gap-4 mt-8">
     <div class="bg-white rounded-md p-6 flex flex-col justify-between">
         <div>
+            <div class="font-semibold text-xl mb-3">Toeic part {{ part }}</div>
             <div>TOEIC Listening Part 1 là nội dung nhìn tranh và miêu tả. </div>
             <div>Phần này gồm 10 bức tranh (đề mới: 6 bức tranh), mỗi bức tranh sẽ có 4 câu mô tả không được in trong đề.</div>
             <div>Nhiệm vụ của các bạn là nghe và chọn đáp án mô tả đúng bức tranh nhất.</div>
         </div>
+        <div class="bg-[#F2F2F2] grid grid-cols-3 gap-3 w-full max-w-[450px] mx-auto rounded-2xl p-4">
+            <div>
+                <div class="mb-2 text-center">Tự động chuyển</div>
+                <div class="setting-toggle setting-item-child mx-auto" [class.active]="practiceService.autoNext" (click)="toggleAutoNext()">
+                    <div class="setting-toggle-btn"></div>
+                </div>
+            </div>
+            <div>
+                <div class="mb-2 text-center">Chế độ kiểm tra</div>
+                <div class="setting-toggle setting-item-child mx-auto" [class.active]="practiceService.testMode" (click)="toggleCheck()">
+                    <div class="setting-toggle-btn"></div>
+                </div>
+            </div>
+            <div>
+                <div class="mb-2 text-center">Số lượng câu</div>
+                <select class="block setting-item-select mx-auto" [(ngModel)]="practiceService.numQues">
+                    @for (item of arrNumQues[part]; track $index) {
+                        <option [ngValue]="item">{{ item }}</option>
+                    }
+                </select>
+            </div>
+        </div>
         <div class="flex justify-center">
-            <button class="btn-primary mr-3">Bắt đầu</button>
+            <a class="btn-primary mr-3" routerLink="/practice/{{ part }}/doing">Bắt đầu</a>
             <button class="btn-danger">Làm lại câu sai</button>
         </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
         <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
-            <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">Hoàn thành</span>
+            <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
+                Hoàn thành
+            </span>
             <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_total.png" alt="Correct">
             <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
             <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
@@ -20,7 +45,9 @@
             </div>
         </div>
         <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
-            <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">Tỉ lệ đúng</span>
+            <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
+                Tỉ lệ đúng
+            </span>
             <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_correct_total.png" alt="Correct">
             <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
             <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">

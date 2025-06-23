@@ -20,7 +20,7 @@ export class UserService {
     }
 
     saveUser(user: InforUser) {
-        this.commonService.user = user;
         this.commonService.setLocal('userInfor', user);
+        this.commonService.sUser.set(user);
     }
 }
