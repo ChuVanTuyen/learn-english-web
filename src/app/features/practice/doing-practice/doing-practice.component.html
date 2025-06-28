@@ -11,8 +11,32 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-4 gap-3">
-        <div class="col-span-3">
+    <div class="md:grid md:grid-cols-4 gap-3">
+        <div>
+            <div class="sticky top-3">
+                <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
+                    <div class="flex items-center">
+                        <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
+                        <div>{{ practiceService.time | datatime:'h:mm:ss' }}</div>
+                    </div>
+                    <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
+                </div>
+                <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
+                    <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
+                        @for (ques of listQuestion; track ques; let quesIdx = $index) {
+                            @for (child of ques.child_ques; track child; let childIdx = $index) {
+                                <div class="question-item" (click)="chooseQuestion(child.idx)"
+                                    [class.active]="child.selected > -1"
+                                >
+                                    {{ child.idx }}
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md:col-span-3">
             @for (ques of listQuestion; track $index) {
                 <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
                     @if(ques.image) {
@@ -45,7 +69,7 @@
                 <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
                     <div class="flex items-center">
                         <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
-                        <div>00:45:00</div>
+                        <div>{{ practiceService.time | datatime:'h:mm:ss' }}</div>
                     </div>
                     <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
                 </div>

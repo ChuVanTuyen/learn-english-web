@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "build:ssr": "ng build",
     "serve:ssr:learn-english-web": "node dist/learn-english-web/server/server.mjs"
   },
   "private": true,
@@ -22,6 +23,7 @@
     "@angular/ssr": "^19.2.6",
     "@canvasjs/angular-charts": "^1.2.0",
     "@tailwindcss/postcss": "^4.1.3",
+    "@videogular/ngx-videogular": "^10.0.1",
     "express": "^4.18.2",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",

@@ -1,18 +1,72 @@
 @let defaultNotes = sDefaultNotes();
-
+@let user = commonService.sUser();
 <div class="container mx-auto">
-    <ng-container [ngTemplateOutlet]="ngListNotebook" [ngTemplateOutletContext]="{list: defaultNotes, title: 'Sổ tay của bạn'}"></ng-container>
+    @if(user && notes.length) {
+        <div class="bg-[#E3ECF6] text-[#2C416D] px-6 py-3 rounded-[20px] flex items-center w-max mt-4" (click)="handlePreAddNote()">
+            <img class="w-7 h-7 mr-2" src="/images/icons/ic_add_notebook.svg" alt="Add noteb">
+            <span>Tạo sổ tay</span>
+        </div>
+    }
+    @if(!notes.length) {
+        <div class="mt-4 shadow-[4px_4px_15px_#ffffff08_inset] bg-white border border-[#F2F2F2] w-full p-4 rounded-3xl border-solid">
+            <div class="col-span-6 font-semibold text-lg">
+                Sổ tay cá nhân
+            </div>
+            <img class="mx-auto w-[180px] h-[180px]" src="/images/web/empty-box.png" alt="Empty">
+            <div class="cursor-pointer btn login w-max mx-auto py-2 px-5 flex items-center mt-4" (click)="handlePreAddNote()">
+                <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus.png" alt="Add notebook">
+                <span>{{ user ? 'Thêm sổ tay' : 'Đăng nhập' }}</span>
+            </div>
+        </div>
+    }  @else {
+        <ng-container [ngTemplateOutlet]="ngListNotebook" [ngTemplateOutletContext]="{list: notes, title: 'Sổ tay của bạn', canEdit: true}"></ng-container>
+    }
     <ng-container [ngTemplateOutlet]="ngListNotebook" [ngTemplateOutletContext]="{list: defaultNotes, title: 'Từ vựng theo chủ đề'}"></ng-container>
 </div>
 
-<ng-template #ngListNotebook let-list="list" let-title="title">
-    <div class="grid grid-cols-6 gap-4 mt-4 shadow-[4px_4px_15px_#ffffff08_inset] bg-white border border-[#F2F2F2] w-full p-4 rounded-3xl border-solid">
+<ng-template #ngListNotebook let-list="list" let-title="title" let-canEdit="canEdit">
+    <div class="md:grid md:grid-cols-6 gap-4 mt-4 shadow-[4px_4px_15px_#ffffff08_inset] bg-white border border-[#F2F2F2] w-full p-4 rounded-3xl border-solid">
         <div class="col-span-6 font-semibold text-lg">{{ title }}</div>
         @for (item of list; track $index) {
-            <div class="bg-[#F2F2F2] p-4 rounded-xl col-span-2">
+            <a routerLink="/notebook/{{ canEdit ? 'detail' : 'auto' }}/{{ item.id }}" class="bg-[#F2F2F2] p-4 block mb-3 rounded-xl md:col-span-2 relative">
                 <div class="font-semibold">{{ item.name }}</div>
                 <div class="mt-1">{{ item.total }} từ</div>
-            </div>
+                @if(canEdit) {
+                    <div class="w-6 h-6 absolute top-3 right-3 box-action-wrap cursor-pointer">
+                        <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
+                        <div class="box-action">
+                            <div (click)="handleAction('edit', $index, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
+                                <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
+                                <span>Sửa</span>
+                            </div>
+                            <div (click)="handleAction('delete', $index, $event)" class="flex items-center gap-1">
+                                <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
+                                <span class="text-[#CD3535]">Xóa</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </a>
         }
     </div>
 </ng-template>
+@defer {
+    <app-add-note />
+    @if(notes[idxAction]) {
+        <app-edit-note [notebook]="notes[idxAction]" />
+    }
+}
+
+<app-modal id="modal-confirm-delete">
+    <div class="fixed -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 max-w-[600px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+        <img class="w-[150px] h-[150px] mx-auto" src="/images/web/delete.png" alt="Delete">
+        <div class="font-medium text-center">Tất cả từ vựng có trong sổ tay này cũng sẽ bị xóa. Bạn có muốn tiếp tục không?</div>
+        <div class="flex items-center justify-end mt-4">
+            <div (click)="commonService.closeModal('modal-confirm-delete')" class="bg-[#f2f2f2] w-[125px] h-[32px] rounded-full flex items-center justify-center mr-3 cursor-pointer">Hủy</div>
+            <div (click)="confirmDelete(notes[idxAction].id)" class="btn login w-[125px] h-[32px] rounded-full flex items-center justify-center cursor-pointer">Xác nhận</div>
+        </div>
+        @if(loadDelete) {
+            <div class="loader"></div>
+        }
+    </div>
+</app-modal>

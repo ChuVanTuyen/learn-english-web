@@ -26,14 +26,6 @@
 .header-link.active .icon {
     display: block;
 }
-.header-auth .btn {
-    border-radius: 99px;
-}
-.header-auth .login {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    font-weight: 500;
-}
 .box-auth {
     display: none;
 }

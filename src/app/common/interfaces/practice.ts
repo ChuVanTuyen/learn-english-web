@@ -1,10 +1,5 @@
 import { ObjectKey } from "./common";
 
-export interface SummaryPractice {
-    done_question_ids: number[],
-    false_question_ids: ObjectKey<number[]>
-}
-
 export interface HistoryPractice {
     id: number,
     content: ObjectKey<number>,
@@ -14,4 +9,14 @@ export interface HistoryPractice {
     part_id: number,
     created_at: string | number,
     updated_at: string | number,
+}
+
+export interface PracticeSummary {
+    done_questions: ObjectKey<number[]>,
+    false_questions: ObjectKey<number[]>
+}
+
+export interface PracticeSummaryResponse {
+    summary: PracticeSummary,
+    history: HistoryPractice[]
 }

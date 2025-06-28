@@ -1,8 +1,8 @@
 @let dDetail = detail();
 @let dAutoTrans = autoTrans();
 @let dResult = results();
-<div class="container mx-auto min-h-[76vh] grid grid-cols-12 gap-4 mt-6">
-    <div class="col-span-2">
+<div class="container mx-auto min-h-[76vh] md:grid md:grid-cols-12 gap-4 mt-6">
+    <div class="md:col-span-2">
         <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border py-4 rounded-3xl border-solid border-[#f2f2f2] lowercase">
             <div class="py-1 pl-3 mb-2 cursor-pointer">Từ vựng</div>
             @if(dDetail) {
@@ -22,7 +22,7 @@
             <div class="py-1 pl-3 mt-2 cursor-pointer">Báo lỗi</div>
         </div>
     </div>
-    <div class="col-span-7">
+    <div class="md:col-span-7">
         @if(dDetail) {
             <ng-container [ngTemplateOutlet]="ngShowWord" [ngTemplateOutletContext]="{ 
                 word: dDetail.word,
@@ -114,7 +114,7 @@
         }
         <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
             <div class="text-lg font-semibold text-[#2C416D]">Hình ảnh</div>
-            <img class="max-w-[474px] mx-auto mt-2" src="https://th.bing.com/th?q={{ query() }}&c=7&rs=1&p=0&o=5&dpr=2&pid=1.7&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1" alt="">
+            <img class="max-w-[474px] w-full mx-auto mt-2" src="https://th.bing.com/th?q={{ query() }}&c=7&rs=1&p=0&o=5&dpr=2&pid=1.7&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1" alt="">
         </div>
         <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
             <div class="text-lg font-semibold text-[#2C416D]">Góp ý</div>
@@ -122,7 +122,7 @@
         </div>
     </div> 
     @if(dResult.length) {
-        <div class="col-span-3">
+        <div class="md:col-span-3">
             <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2]">
                 <div class="font-semibold">Các từ gợi ý</div>
                 @for (suggest of dResult; track $index) {

@@ -35,7 +35,7 @@
     <label class="block mt-5 font-medium">*Nhập lại mật khẩu</label>
     <div class="flex items-center border border-[var(--color-neutral-95)] px-3 py-2 rounded-xl focus-within:border-[var(--color-primary)]">
         <img class="w-[18px] mr-2" src="/images/icons/ic_padlock.png" alt="Password">
-        <input #inputElement class="outline-none grow" [type]="showRePass ? 'text' : 'password'" formControlName="password" (keydown.enter)="handleEnter(3, $event)" />
+        <input #inputElement class="outline-none grow" [type]="showRePass ? 'text' : 'password'" formControlName="rePassword" (keydown.enter)="handleEnter(3, $event)" />
         <img class="w-[18px]" (click)="showRePass = !showRePass" src="/images/icons/ic_{{ showRePass ? 'hidden' : 'eye' }}.png" alt="icon">
     </div>
     @if (submitted) {
@@ -51,5 +51,5 @@
         }
     }
 </form>
-<div class="btn-primary w-full text-center mt-5">Đăng ký</div>
+<div class="btn-primary w-full text-center mt-5" (click)="submit()">Đăng ký</div>
 <div class="text-center my-3">Hoặc</div>

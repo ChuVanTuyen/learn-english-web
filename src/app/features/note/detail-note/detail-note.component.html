@@ -1,0 +1,70 @@
+@let user = commonService.sUser();
+<div class="container mx-auto">
+    @if(detailNote) {
+        <div class="flex justify-between items-center mt-4 mb-3">
+            <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook">
+                <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+                Trở về
+            </a>
+            <div class="text-center">
+                <div class="text-2xl font-medium">{{ detailNote.name }}</div>
+                <div class="mt-2 text-[#595959]">{{ detailNote.total }} từ &#8226; {{ detailNote.created_at | date:'yyyy.MM.dd | hh:mm' }}</div>
+            </div>
+            <div class="flex items-center bg-white rounded-full px-4 py-2">
+                Tùy chọn
+                <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
+            </div>
+        </div>
+
+        @if(!detailNote.words.length) {
+            <div class="flex items-center justify-center flex-col min-h-[70vh]">
+                <div class="font-semibold mb-2">Bạn chưa thêm từ vào sổ tay</div>
+                <div class="mb-3">Bạn có thể thêm các từ, cụm từ vào sổ tay</div>
+                <div (click)="openAddWord()" class="cursor-pointer btn login w-max mx-auto py-2 px-5 flex items-center mt-4">
+                    <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus.png" alt="Add notebook">
+                    <span>Thêm từ</span>
+                </div>
+            </div>
+        } @else {
+            <div class="min-h-[70vh]">
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="col-span-12 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                        <div class="grid grid-cols-3 gap-3">
+                            @for (word of detailNote.words; track $index) {
+                                <div class="bg-[#f2f2f2] relative p-3 rounded-[20px]">
+                                    <div class="font-medium text-lg">{{ word.word }}</div>
+                                    @if(word.pronounce) {
+                                        <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
+                                    }
+                                    <div class="mt-1">{{ word.mean }}</div>
+                                    @if(detailNote.user_id === user?.id) {
+                                        <div class="w-6 h-6 absolute top-3 right-3 box-action-wrap cursor-pointer">
+                                            <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
+                                            <div class="box-action">
+                                                <div (click)="handleActionWord('edit', word, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
+                                                    <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
+                                                    <span>Sửa</span>
+                                                </div>
+                                                <div (click)="handleActionWord('delete', word, $event)" class="flex items-center gap-1">
+                                                    <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
+                                                    <span class="text-[#CD3535]">Xóa</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div (click)="openAddWord()" class="cursor-pointer btn login w-max mx-auto py-2 px-5 flex items-center mt-4">
+                            <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus.png" alt="Add notebook">
+                            <span>Thêm từ</span>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        }
+    }
+</div>
+
+<app-add-word />

@@ -3,7 +3,14 @@ export interface DataLogin {
     password: string;
 }
 
+export interface DataRegister {
+    name: string;
+    email: string;
+    password: string;
+}
+
 export interface InforUser {
+    id: number;
     accessToken: string,
     email: string,
     name: string,

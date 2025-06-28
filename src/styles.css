@@ -53,6 +53,70 @@ body {
     font-weight: 600;
     font-family: Wendy_One;
 }
+.btn.login {
+    border-radius: 99px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: 500;
+}
+
+.btn-primary, .btn-warn, .btn-danger, .btn-success {
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 99px;
+    cursor: pointer;
+    color: var(--color-white);
+    text-decoration: none;
+    user-select: none;
+}
+.btn-primary {
+    background-color: var(--color-primary);
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-20);
+}
+.btn-warn {
+    background-color: var(--color-warn);
+}
+.btn-warn:hover {
+    background-color: var(--color-warn-hover);
+}
+.btn-danger {
+    background-color: var(--color-fail);
+}
+.btn-danger:hover {
+    background-color: var(--color-fail-hover);
+}
+.btn-success {
+    background-color: var(--color-success);
+}
+.btn-success:hover {
+    background-color: var(--color-success-hover);
+
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+    }
+}
+.loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #afb2b6;
+    width: 50px;
+    height: 50px;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+}
+
 @media (width >= 96rem) {
     .container {
         max-width: 86rem;

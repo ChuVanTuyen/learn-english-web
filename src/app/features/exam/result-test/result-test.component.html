@@ -11,9 +11,9 @@
             Tùy chọn
             <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
         </div>
-    </div>
+    </div>.
     @if(detailTest) {
-        <div class="grid grid-cols-4 gap-3">
+        <div class="gap-3">
             <div class="col-span-3">
                 @for (skill of detailTest.skills; track skill; let skillIdx = $index) {
                     @for (part of skill.parts; track part; let partIdx = $index) {

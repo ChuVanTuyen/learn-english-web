@@ -1,0 +1,10 @@
+<app-modal id="modal-require-login">
+    <div class="fixed -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 max-w-[600px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+        <img class="w-[200px] h-[200px] mx-auto" src="/images/web/encrypted-phone.png" alt="Require login">
+        <div class="text-center text-lg font-medium">Bạn cần đăng nhập để sử dụng tính năng này</div>
+        <div class="flex items-center justify-center mt-4">
+            <div class="btn-warn mr-3" (click)="close()">Đóng</div>
+            <div class="btn-primary" (click)="login()">Đăng nhập</div>
+        </div>
+    </div>
+</app-modal>

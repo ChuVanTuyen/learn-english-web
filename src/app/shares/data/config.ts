@@ -1,4 +1,5 @@
 import { HttpHeaders } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 export const HTTP_OPTION = {
     headers: new HttpHeaders({
@@ -6,5 +7,5 @@ export const HTTP_OPTION = {
     })
 };
 
-export const BASE_URL = 'http://localhost:3000/api/';
-export const BASE_URL_PUBLIC = 'http://localhost:3000/';
+export const BASE_URL = environment.URL + 'api/';
+export const BASE_URL_PUBLIC = environment.URL;

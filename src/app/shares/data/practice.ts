@@ -34,4 +34,16 @@ export const LIST_PART = [
         name: 'Phần 7: Đọc hiểu đoạn văn',
         image: '/images/web/7.png'
     }
-]
+];
+
+const arrNum1 = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+const arrNum2 = [1, 2, 3, 4, 5];
+export const ARR_NUM_QUES: number[][] = [
+    arrNum1,
+    arrNum1,
+    arrNum2,
+    arrNum2,
+    arrNum1,
+    arrNum2,
+    arrNum2,
+];

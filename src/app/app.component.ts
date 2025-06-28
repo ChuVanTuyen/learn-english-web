@@ -4,15 +4,17 @@ import { HeaderComponent } from './shares/components/header/header.component';
 import { FooterComponent } from "./shares/components/footer/footer.component";
 import { CommonService } from './shares/services/common.service';
 import { NotifyComponent } from "./shares/components/notify/notify.component";
+import { ModalRequireLoginComponent } from "./shares/modals/modal-require-login/modal-require-login.component";
 
 @Component({
     selector: 'app-root',
     imports: [
-        RouterOutlet,
-        HeaderComponent,
-        FooterComponent,
-        NotifyComponent
-    ],
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    NotifyComponent,
+    ModalRequireLoginComponent
+],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })

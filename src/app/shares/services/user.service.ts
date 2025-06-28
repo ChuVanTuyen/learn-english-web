@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as CONFIG from "../data/config";
 import { HttpClient } from '@angular/common/http';
-import { DataLogin, InforUser } from '../../common/interfaces/user';
+import { DataLogin, DataRegister, InforUser } from '../../common/interfaces/user';
 import { CommonService } from './common.service';
 
 @Injectable({
@@ -16,6 +16,11 @@ export class UserService {
 
     login(data: DataLogin) {
         const url = CONFIG.BASE_URL + 'auth/login';
+        return this.http.post<InforUser>(url, data, CONFIG.HTTP_OPTION);
+    }
+
+    register(data: DataRegister) {
+        const url = CONFIG.BASE_URL + 'auth/register';
         return this.http.post<InforUser>(url, data, CONFIG.HTTP_OPTION);
     }
 

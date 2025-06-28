@@ -1,7 +1,7 @@
 @let listTest = sListTest();
 @let idxHistory = sIdxHistory();
-<div class="container mx-auto grid grid-cols-3 gap-3">
-    <div>
+<div class="container mx-auto md:grid md:grid-cols-3 gap-3">
+    <div class="">
         <h4 class="my-3 font-semibold">Cấu trúc đề thi</h4>
         <div class="struct-skill">Nghe hiểu</div>
         <div class="struct-skill-cont relative">
@@ -21,7 +21,7 @@
             <div class="struct-part my-3">Đoạn văn đơn & Nhóm đoạn văn</div>
         </div>
     </div>
-    <div class="col-span-2 mt-40px grid gap-3 grid-cols-3 list-test">
+    <div class="col-span-2 mt-40px md:grid gap-3 md:grid-cols-3 list-test">
         @for (test of listTest; track $index) {
             <div class="test-item relative">
                 <div class="font-medium">{{ test.name }}</div>

@@ -5,14 +5,16 @@ import { ChildQues, Question } from '../../../common/interfaces/exam';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
 import { BASE_URL } from '../../../shares/data/config';
 import { DOCUMENT } from '@angular/common';
-import { HistoryPractice, SummaryPractice } from '../../../common/interfaces/practice';
+import { HistoryPractice, PracticeSummary } from '../../../common/interfaces/practice';
+import { DatatimePipe } from "../../../common/pipes/datatime.pipe";
 
 @Component({
     selector: 'app-doing-practice',
     imports: [
-        SafePipe,
-        RouterLink
-    ],
+    SafePipe,
+    RouterLink,
+    DatatimePipe
+],
     templateUrl: './doing-practice.component.html',
     styleUrls: [
         '../../../shares/styles/button.css',
@@ -26,7 +28,7 @@ export class DoingPracticeComponent {
     listQuestion: Question[] = [];
     constructor(
         private route: ActivatedRoute,
-        private practiceService: PracticeService,
+        protected readonly practiceService: PracticeService,
         @Inject(DOCUMENT) private document: Document
     ) {}
 
@@ -80,9 +82,9 @@ export class DoingPracticeComponent {
             part_id: this.part
         } as HistoryPractice;
 
-        let summaryPractice: SummaryPractice = {
-            done_question_ids: [],
-            false_question_ids: {}
+        let summaryPractice: PracticeSummary = {
+            done_questions: {},
+            false_questions: {}
         }
         this.listQuestion.forEach(ques => {
             ques.child_ques.forEach(child => {
@@ -91,20 +93,26 @@ export class DoingPracticeComponent {
                 if(child.isCorrect) {
                     dataSend.correct ++;
                 }
-                if(!summaryPractice.done_question_ids.includes(ques.id)) {
-                    summaryPractice.done_question_ids.push(ques.id);
+                if(!summaryPractice.done_questions[this.part]) {
+                    summaryPractice.done_questions[this.part] = [ques.id];
+                } else {
+                    if(!summaryPractice.done_questions[this.part].includes(ques.id)) {
+                        summaryPractice.done_questions[this.part].push(ques.id);
+                    }
                 }
                 if(!ques.child_ques.every(c => c.isCorrect)) {
-                    if(!summaryPractice.false_question_ids[this.part]) {
-                        summaryPractice.false_question_ids[this.part] = [ques.id];
+                    if(!summaryPractice.false_questions[this.part]) {
+                        summaryPractice.false_questions[this.part] = [ques.id];
                     } else {
-                        if(!summaryPractice.false_question_ids[this.part].includes(ques.id)) {
-                            summaryPractice.false_question_ids[this.part].push(ques.id);
+                        if(!summaryPractice.false_questions[this.part].includes(ques.id)) {
+                            summaryPractice.false_questions[this.part].push(ques.id);
                         }
                     }
                 }
             })
         });
-        console.log(dataSend, summaryPractice);
+        this.practiceService.savePracticeSummary(summaryPractice, dataSend).subscribe({
+            next: res => {}
+        })
     }
 }

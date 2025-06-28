@@ -1,4 +1,4 @@
-<div class="min-h-[80vh] container mx-auto grid grid-cols-2 gap-4 mt-8">
+<div class="min-h-[80vh] container mx-auto md:grid md:grid-cols-2 gap-4 mt-8">
     <div class="bg-white rounded-md p-6 flex flex-col justify-between">
         <div>
             <div class="font-semibold text-xl mb-3">Toeic part {{ part }}</div>
@@ -21,7 +21,7 @@
             </div>
             <div>
                 <div class="mb-2 text-center">Số lượng câu</div>
-                <select class="block setting-item-select mx-auto" [(ngModel)]="practiceService.numQues">
+                <select class="block setting-item-select mx-auto" [(ngModel)]="practiceService.numQues" (ngModelChange)="hanldeTime()">
                     @for (item of arrNumQues[part]; track $index) {
                         <option [ngValue]="item">{{ item }}</option>
                     }
@@ -33,31 +33,60 @@
             <button class="btn-danger">Làm lại câu sai</button>
         </div>
     </div>
-    <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
-            <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
-                Hoàn thành
-            </span>
-            <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_total.png" alt="Correct">
-            <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
-            <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
-                <div class="h-full w-3/5 bg-[var(--color-primary)]"></div>
+    <div class="md:grid md:grid-cols-2 gap-4">
+        @if(summary) {
+            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
+                <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
+                    Hoàn thành
+                </span>
+                <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_total.png" alt="Correct">
+                <span class="text-xl font-bold text-[var(--color-neutral-45)]">
+                    {{ (summary.done_questions[part].length / totalQues[part - 1] * 100) | number:'1.0-0' }}%
+                </span>
+                <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--color-primary)]" [style.width.%]="(summary.done_questions[part].length / totalQues[part - 1] * 100) | number:'1.0-0'"></div>
+                </div>
             </div>
-        </div>
-        <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
-            <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
-                Tỉ lệ đúng
-            </span>
-            <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_correct_total.png" alt="Correct">
-            <span class="text-xl font-bold text-[var(--color-neutral-45)]">60%</span>
-            <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
-                <div class="h-full w-3/5 bg-[var(--color-success)]"></div>
+            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
+                <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
+                    Tỉ lệ đúng
+                </span>
+                <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_correct_total.png" alt="Correct">
+                <span class="text-xl font-bold text-[var(--color-neutral-45)]">{{ ((summary.done_questions[part].length - summary.false_questions[part].length) / summary.done_questions[part].length * 100) | number:'1.0-0' }}%</span>
+                <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--color-success)]" [style.width.%]="((summary.done_questions[part].length - summary.false_questions[part].length) / summary.done_questions[part].length * 100) | number:'1.0-0'"></div>
+                </div>
             </div>
-        </div>
+        } @else {
+            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
+                <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
+                    Hoàn thành
+                </span>
+                <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_total.png" alt="Correct">
+                <span class="text-xl font-bold text-[var(--color-neutral-45)]">
+                    0%
+                </span>
+                <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--color-primary)]" [style.width.%]="0"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
+                <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
+                    Tỉ lệ đúng
+                </span>
+                <img class="w-8 row-span-2 justify-self-end" src="images/icons/ic_correct_total.png" alt="Correct">
+                <span class="text-xl font-bold text-[var(--color-neutral-45)]">0%</span>
+                <div class="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--color-success)]" [style.width.%]="0"></div>
+                </div>
+            </div>
+        }
         <div class="bg-white rounded-md col-span-2 p-4">
             <div class="font-semibold text-lg mb-4">Lịch sử luyện tập</div>
             <div class="max-h-[280px] overflow-hidden">
-                <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+                @if(!loading) {
+                    <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+                }
             </div>
             <div class="mx-auto w-max">
                 <div class="mt-5 w-max">
