@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { Test } from '../../common/interfaces/exam';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TestService } from '../../shares/services/test.service';
 import { ModalHistoriesComponent } from "../../shares/modals/modal-histories/modal-histories.component";
 import { CommonService } from '../../shares/services/common.service';
@@ -23,7 +23,8 @@ export class ExamComponent {
 
     constructor(
         private testService: TestService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -39,5 +40,15 @@ export class ExamComponent {
         }, 100)
     }
 
-    ngAfterViewInit() {}
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
+
+    openExam(id: number) {
+        if(this.commonService.sUser()) {
+            this.router.navigate(['/exam/detail/' + id]);
+        } else {
+            this.commonService.openModal('modal-require-login');
+        }
+    }
 }

@@ -47,7 +47,7 @@
                             <div class="mt-2">120 phút</div>
                             <div class="mt-2">Nghe & đọc</div>
                         </div>
-                        <a class="btn-primary w-max" routerLink="/exam/detail/{{test.id}}">Bắt đầu</a>
+                        <div class="btn-primary w-max" (click)="openExam(test.id)">Bắt đầu</div>
                     </div>
                 }
             </div>

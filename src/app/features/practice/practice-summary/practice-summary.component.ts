@@ -102,10 +102,6 @@ export class PracticeSummaryComponent {
     toggleCheck() {
         this.practiceService.testMode = !this.practiceService.testMode;
     }
-    
-    toggleAutoNext() {
-        this.practiceService.autoNext = !this.practiceService.autoNext;
-    }
 
     hanldeTime() {
         this.practiceService.time = this.practiceService.numQues * this.averageTime[this.part - 1];

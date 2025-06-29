@@ -6,13 +6,7 @@
             <div>Phần này gồm 10 bức tranh (đề mới: 6 bức tranh), mỗi bức tranh sẽ có 4 câu mô tả không được in trong đề.</div>
             <div>Nhiệm vụ của các bạn là nghe và chọn đáp án mô tả đúng bức tranh nhất.</div>
         </div>
-        <div class="bg-[#F2F2F2] grid grid-cols-3 gap-3 w-full max-w-[450px] mx-auto rounded-2xl p-4">
-            <div>
-                <div class="mb-2 text-center">Tự động chuyển</div>
-                <div class="setting-toggle setting-item-child mx-auto" [class.active]="practiceService.autoNext" (click)="toggleAutoNext()">
-                    <div class="setting-toggle-btn"></div>
-                </div>
-            </div>
+        <div class="bg-[#F2F2F2] grid grid-cols-2 gap-3 w-full max-w-[450px] mx-auto rounded-2xl p-4">
             <div>
                 <div class="mb-2 text-center">Chế độ kiểm tra</div>
                 <div class="setting-toggle setting-item-child mx-auto" [class.active]="practiceService.testMode" (click)="toggleCheck()">

@@ -1,0 +1,109 @@
+<div class="rounded-xl z-[3] fixed bottom-0 right-0 bg-[#f2f2f2] w-[50vw] max-w-[560px] " [class.hidden]="isClose">
+    <div class="bg-[#2C416D] text-white rounded-t-xl px-4 py-2 flex items-center justify-between">
+        <div class="font-semibold">{{ query }}</div>
+        <img (click)="close()" class="w-4 h-4 cursor-pointer" src="/images/icons/ic_close_w.png" alt="close" title="Đóng">
+    </div>
+    <div class="p-5 h-[50vh] overflow-auto scrollbar-common">
+        @if(loading) {
+            <div class="loader"></div>
+        } @else { 
+            @if(detail) {
+                <ng-container [ngTemplateOutlet]="ngShowWord" [ngTemplateOutletContext]="{ 
+                    word: detail.word,
+                    pronounce: detail.pronounce
+                }">
+                </ng-container>
+            } @else {
+                @if(autoTrans) {
+                    <ng-container [ngTemplateOutlet]="ngShowWord" [ngTemplateOutletContext]="{ 
+                        word: autoTrans.origin,
+                        pronounce: autoTrans.pronounce,
+                        mean: autoTrans.mean
+                    }">
+                    </ng-container>
+                }
+            }
+            <ng-template #ngShowWord let-word="word" let-pronounce="pronounce" let-mean="mean">
+                <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2]">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center">
+                            <h1 class="text-[26px] text-[#CD3535]">{{ word }}</h1>
+                            <img class="w-6 h-6 ml-3" src="/images/icons/ic_speaker.svg" alt="Voice" (click)="audioService.playAudio(word)">
+                        </div>
+                        <img (click)="openAddToNote(detail)" class="w-6 h-6 cursor-pointer" src="/images/icons/ic_save.svg" alt="Lưu" title="Lưu">
+                    </div>
+                    <div class="text-[#595959] text-lg leading-6">
+                        [ {{ pronounce }} ]
+                    </div>
+                    @if(mean) {
+                        <div class="mt-3 pt-3 border-t-[#f2f2f2] border-t border-solid">
+                            {{ mean }}
+                        </div>
+                    }
+                </div>
+            </ng-template>
+            @if(detail) {
+                @for (kind of detail.content; track kindIdx; let kindIdx = $index) {
+                    <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                        <div class="text-lg font-semibold text-[#2C416D]">{{ kind.kind }}</div>
+                        @for (kindCt of kind.kind_content; track kindCtIdx; let kindCtIdx = $index) {
+                            <div class="font-medium">{{ kindCtIdx + 1 }}. {{ kindCt.means }}</div>
+                            <div class="ml-3 pl-3 border-l-neutral-200 border-l border-solid">
+                                @for (example of kindCt.examples; track exampleIdx; let exampleIdx = $index) {
+                                    <div class="flex items-center gap-2 mt-2 ">
+                                        <img class="w-6 h-6" src="/images/icons/ic_speaker.svg" alt="Read" (click)="audioService.playAudio(example.example)">
+                                        <highlight-query [query]="detail.word" [data]="example.example" />
+                                    </div>
+                                    <div class="pl-8 mb-2 text-[#888888]">{{ example.mean }}</div>
+                                }
+                            </div>
+                        }
+        
+                        @if(kind.idioms && kind.idioms.length) {
+                            <div class="text-lg font-semibold text-[#2C416D]">Idioms</div>
+                            <ul class="list-disc pl-5">
+                                @for (kindIdiom of kind.idioms; track idiomIdx; let idiomIdx = $index) {
+                                    <li class="my-1">
+                                        <div class="font-medium">{{ kindIdiom.idiom }}</div>
+                                        <div class="text-[#212529bf]">{{ kindIdiom.mean }}</div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+        
+                    </div>
+                }
+        
+                @if(detail.synonyms && detail.synonyms.length) {
+                    <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                        <div class="text-lg font-semibold text-[#2C416D]">Đồng nghĩa</div>
+                        <div class="flex flex-wrap gap-2">
+                            @for (syn of detail.synonyms; track $index) {
+                                <a [routerLink]="'/dictionary/word/' + syn">
+                                    {{ syn }}
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+        
+                @if(detail.antonyms && detail.antonyms.length) {
+                    <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                        <div class="text-lg font-semibold text-[#2C416D]">Trái nghĩa</div>
+                        <div class="flex flex-wrap gap-2">
+                            @for (syn of detail.antonyms; track $index) {
+                                <a [routerLink]="'/dictionary/word/' + syn">
+                                    {{ syn }}
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            <div class="bg-white shadow-[4px_4px_15px_#ffffff08_inset] border p-4 rounded-3xl border-solid border-[#f2f2f2] mt-3">
+                <div class="text-lg font-semibold text-[#2C416D]">Hình ảnh</div>
+                <img class="max-w-[474px] w-full mx-auto mt-2" src="https://th.bing.com/th?q={{ query }}&c=7&rs=1&p=0&o=5&dpr=2&pid=1.7&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1" alt="">
+            </div>
+        }
+    </div>
+</div>

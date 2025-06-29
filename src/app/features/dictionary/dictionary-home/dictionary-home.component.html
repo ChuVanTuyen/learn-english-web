@@ -4,7 +4,9 @@
             <div class="font-medium mb-4">Từ khóa hót</div>
             <div class="flex flex-wrap gap-3">
                 @for (item of ['ok', 'hi', 'close', 'done', 'beer', 'please', 'good', 'sitdown']; track $index) {
-                    <div class="bg-[#F2F2F2] px-3 py-2 rounded-[99px] border-[#F2F2F2]">{{ item }}</div>
+                    <a [routerLink]="'/dictionary/word/' + item" class="bg-[#F2F2F2] px-3 py-2 rounded-[99px] border-[#F2F2F2]">
+                        {{ item }}
+                    </a>
                 }
             </div>
         </div>
@@ -25,7 +27,9 @@
             <div class="font-medium mb-4">Lịch sử</div>
             <div class="flex flex-wrap gap-3">
                 @for (item of ['ok', 'hi', 'close', 'done', 'beer', 'please', 'good', 'sitdown']; track $index) {
-                    <div class="bg-[#F2F2F2] px-3 py-2 rounded-[99px] border-[#F2F2F2]">{{ item }}</div>
+                    <a [routerLink]="'/dictionary/word/' + item" class="bg-[#F2F2F2] px-3 py-2 rounded-[99px] border-[#F2F2F2]">
+                        {{ item }}
+                    </a>
                 }
             </div>
         </div>

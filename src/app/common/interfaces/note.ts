@@ -35,14 +35,34 @@ export interface DataAddWord {
     note?: string,
 }
 
-// export interface WordNotebook{
-//     "id": 811,
-//     "notebook_id": 21,
-//     "word": "hello",
-//     "pronounce": "helo",
-//     "kind": "",
-//     "mean": "Xin chào",
-//     "note": "",
-//     "created_at": "2025-06-27T12:32:18.427Z",
-//     "updated_at": "2025-06-27T12:32:18.427Z"
-// }
+export interface MultiQuestionWord {
+    question: string;
+    answers: AnswerWord[];
+    word: WordNotebook;
+    choose: number;
+    type: number;
+    userAns: string;
+    isCorrect: boolean;
+    submit: boolean;
+}
+
+export interface AnswerWord {
+    id: number,
+    content: string;
+    pronounce?: string;
+}
+
+export interface ResultGame {
+    name: string;
+    date: Date;
+    time: number;
+    total: number;
+    correct: number;
+}
+
+export interface WordFlashCard extends WordNotebook {
+    status: number,
+    pEvent: boolean,
+    flip: boolean,
+    isShowMix: boolean
+}

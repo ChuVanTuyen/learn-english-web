@@ -1,0 +1,277 @@
+.flashcard {
+    overflow: hidden;
+    position: relative;
+    min-height: calc(100vh - 75px);
+}
+.page-volume {
+    display: flex;
+    justify-content: end;
+}
+.page-volume .volume {
+    width: 24px;
+}
+.infor {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+.txt-word {
+    font-size: 3.5em;
+    line-height: 65px;
+    white-space: break-spaces;
+    max-height: 210px;
+}
+.txt-word.scrollbar-common {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.txt-word.medium {
+    font-size: 3em;
+    line-height: 60px;
+}
+.txt-word.small {
+    font-size: 2em;
+    line-height: 42px;
+}
+.txt-word.behind {
+    margin-bottom: 0;
+}
+.infor .mean {
+    margin-top: 16px;
+    font-size: 18px;
+    white-space: normal;
+}
+.infor .pinyin {
+    font-size: 20px;
+}
+.pinyin img {
+    margin-right: 8px;
+}
+@media(max-width: 769px) {
+    .page-volume .volume {
+        width: 25px;
+    }
+}
+.box-flashcard {
+    position: relative;
+    height: 52vh;
+    min-height: 352px;
+}
+.flip-card-wrap {
+    height: 100%;
+    max-width: 600px;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.flip-card {
+    background-color: transparent;
+    background: none;
+    -webkit-perspective: 800px;
+    -ms-perspective: 800px;
+    -moz-perspective: 800px;
+    -o-perspective: 800px;
+    perspective:  800px;
+    height: 100%;
+    width: 100%;
+    transform-style: preserve-3d;
+    position: relative;
+    box-shadow: none;
+}
+  
+.flip-card-inner {
+    transition: .5s ease-out;
+    -webkit-transition: .5s ease-out;
+    -moz-transition: .5s ease-out;
+    -o-transition: .5s ease-out;
+    -ms-transition: .5s ease-out;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    -moz-backface-visibility: visible;
+    -o-backface-visibility: visible;
+    -ms-backface-visibility: visible;
+    width: 98%;
+    height: 100%;
+    position: relative;
+    border-radius: 7px;
+}
+.flip-card-inner.shadow > div {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+  
+.flip-card.apply-flip .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    border-radius: 7px 7px 0 0;
+    text-align: center;
+    padding: 11px;
+    font-size: 20px;
+    font-weight: 600;
+    display: none;
+    color: #fff;
+}
+
+.card-top.review {
+    display: block;
+    background-color: #fe9a05;
+}
+.card-top.done {
+    display: block;
+    background-color: #0F8C66;
+}
+  
+.flip-card-front, .flip-card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    -ms-backface-visibility: visible;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    text-align: center;
+    border-radius: 7px;
+    flex-direction: column;
+    padding: 20px;
+    cursor: pointer;
+    background-color: #fff;
+}  
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cdk-drag-dragging .flip-card-inner {
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.point-ev-disabled {
+    user-select: none;
+    pointer-events: none;
+    touch-action: none;
+}
+
+.box-remember {
+    max-width: 800px;
+}
+.box-count {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px #0000000d;
+    border-radius: 6px;
+}
+.box-count.left {
+    background-color: #fe9a05;
+}
+.box-count.right {
+    background-color: #2C416D;
+}
+
+.item-menu {
+    width: 45px;
+    height: 45px;
+    background-color: #fff;
+    margin-bottom: 12px;
+    border-radius: 7px;
+    line-height: 43px;
+    text-align: center;
+    cursor: pointer;
+    padding-left: 2px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px 0px #0000000d;
+}
+
+.box-menu {
+    position: absolute;
+    right: 15%;
+    top: 1.5rem;
+}
+.box-setting {
+    position: absolute;
+    right: 20%;
+    top: 5rem;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #aaa;
+    width: 250px;
+}
+.box-setting > div {
+    width: 100%;
+}
+
+.setting-item-child {
+    height: 2rem;
+    width: 4rem;
+    background-color: #fff;
+    border-radius: 99px;
+    border: 1px solid #aaa;
+    
+}
+.setting-toggle {
+    cursor: pointer;
+    position: relative;
+}
+.setting-toggle .setting-toggle-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #BDBDBD;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0.35rem;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+.setting-toggle.active {
+    border-color: #2C416D;
+}
+.setting-toggle.active .setting-toggle-btn {
+    left: 2.15rem;
+    background-color: #2C416D;
+}
+
+.progress-bar {
+    height: 8px;
+    border-radius: 8px;
+    background-color: #00b2a51f;
+    max-width: 800px;
+    width: 100%;
+}
+.progress-bar .progress {
+    height: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.progress-bar .progress.warn {
+    background-color: #FE9A05;
+}
+.progress-bar .progress.success {
+    background-color: #0F8C66;
+} 
+.progress-bar .progress.danger {
+    background-color: #FF5A60;
+} 

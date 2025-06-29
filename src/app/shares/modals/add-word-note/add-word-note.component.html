@@ -1,0 +1,18 @@
+<app-modal id="modal-add-to-note">
+    <div class="fixed -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 max-w-[600px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+        <div class="text-lg font-medium text-center">Chọn sổ tay</div>
+        @if(listNoteb.length) {
+            @for (note of listNoteb; track $index) {
+                <div (click)="confirmAdd(note)" class="px-3 py-2 rounded-2xl bg-[#f2f2f2] mt-3 cursor-pointer">
+                    <div class="font-semibold">{{ note.name }}</div>
+                    <div class="font-[#8C8C8C]">{{ note.total }}</div>
+                </div>
+            }
+        }@else {
+            <div class="text-center py-12 text-[#565656] font-semibold">Danh sách sổ tay trống</div>
+        }
+        @if(loading) {
+            <div class="loader"></div>
+        }
+    </div>
+</app-modal>

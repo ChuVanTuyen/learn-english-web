@@ -28,15 +28,21 @@
         } @else {
             <div class="min-h-[70vh]">
                 <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-12 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                    <div class="col-span-9 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                        @if(detailNote.user_id === user?.id) {
+                            <div (click)="openAddWord()" class="cursor-pointer bg-[#F2F2F2] rounded-full w-max mb-3 py-2 px-5 flex items-center mt-4">
+                                <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus_black.svg" alt="Add notebook">
+                                <span>Thêm từ</span>
+                            </div>
+                        }
                         <div class="grid grid-cols-3 gap-3">
                             @for (word of detailNote.words; track $index) {
-                                <div class="bg-[#f2f2f2] relative p-3 rounded-[20px]">
+                                <div class="bg-[#f2f2f2] relative p-3 rounded-[20px] cursor-pointer" (click)="openModalSearch(word.word)">
                                     <div class="font-medium text-lg">{{ word.word }}</div>
                                     @if(word.pronounce) {
                                         <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
                                     }
-                                    <div class="mt-1">{{ word.mean }}</div>
+                                    <div class="mt-1 two-line">{{ word.mean }}</div>
                                     @if(detailNote.user_id === user?.id) {
                                         <div class="w-6 h-6 absolute top-3 right-3 box-action-wrap cursor-pointer">
                                             <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
@@ -55,13 +61,20 @@
                                 </div>
                             }
                         </div>
-                        <div (click)="openAddWord()" class="cursor-pointer btn login w-max mx-auto py-2 px-5 flex items-center mt-4">
-                            <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus.png" alt="Add notebook">
-                            <span>Thêm từ</span>
-                        </div>
+                    </div>
+                    <div class="col-span-3">
+                        <a routerLink="/notebook/detail/{{ detailNote.id }}/practice" class="block relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                            <div class="text-lg font-medium">Ôn tập</div>
+                            <div class="w-max text-[#CD3535] bg-[#FDF3F3] mt-6 text-sm font-medium leading-4 px-2 py-1 rounded-full">Mới</div>
+                            <img class="w-[124px] h-[124px] absolute rotate-[-15deg] -right-6 -bottom-10" src="/images/icons/ic_folder.svg" alt="Ôn tập">
+                        </a>
+                        <a routerLink="/notebook/detail/{{ detailNote.id }}/flashcard" class="block mt-3 relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                            <div class="text-lg font-medium">Flashcard</div>
+                            <div class="w-max text-[#CD3535] bg-[#FDF3F3] mt-6 text-sm font-medium leading-4 px-2 py-1 rounded-full">Mới</div>
+                            <img class="w-[124px] h-[124px] absolute rotate-[-15deg] -right-6 -bottom-10" src="/images/icons/ic_flashcard.svg" alt="Flashcard">
+                        </a>
                     </div>
                 </div>
-    
             </div>
         }
     }

@@ -1,0 +1,28 @@
+.answer-item {
+    border: 1px solid #f2f2f2;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    height: 75px;
+    cursor: pointer;
+}
+.active {
+    background-color: #E3ECF6;
+    border-color: #2C416D;
+    color: #2C416D;
+} 
+.success {
+    background-color: #EDFCF5;
+    border-color: #0F8C66;
+    color: #0F8C66;
+}
+.wrong {
+    background-color: #FDF3F3;
+    border-color: #CD3535;
+    color: #CD3535;
+}

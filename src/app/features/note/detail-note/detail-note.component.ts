@@ -16,7 +16,6 @@ import { BroadcasterService } from '../../../shares/services/broadcaster.service
 export class DetailNoteComponent {
 
     idNote: number = 0;
-    isAutoNote: boolean = false;
     detailNote: DetailNotebook | undefined;
 
     constructor(
@@ -30,7 +29,6 @@ export class DetailNoteComponent {
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             const id = Number(params.get('id'));
-            this.isAutoNote = this.router.url.includes('auto');
             if(id) {
                 this.idNote = id;
                 if(this.commonService.getEnvironment() === 'client') {
@@ -72,5 +70,9 @@ export class DetailNoteComponent {
     openAddWord() {
         console.log('run');
         this.broadcaster.broadcast('add-word-to-note', {noteId: this.detailNote!.id, type: 'add'});
+    }
+
+    openModalSearch(query: string) {
+        this.broadcaster.broadcast('open-modal-search', query);
     }
 }

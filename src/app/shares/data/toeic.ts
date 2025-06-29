@@ -2,7 +2,7 @@ import { ObjectKey } from "../../common/interfaces/common";
 import { IntroPart } from "../../common/interfaces/exam";
 
 export const partIntros: ObjectKey<IntroPart> = {
-    1: {
+    0: {
         "id": 1,
         "title": "EXAMPLE:\nNow listen to the four statements.\nStatement (D) best describes what you see in the picture.\nTherefore, you should choose answer (D).",
         "audio": "https://data.dunno.ai/uploads/intro/part_i_intro.mp3",
@@ -18,7 +18,7 @@ export const partIntros: ObjectKey<IntroPart> = {
         "created_at": "2021-08-04 03:19:08",
         "updated_at": "2021-08-04 03:19:08"
     },
-    2: {
+    1: {
         "id": 2,
         "title": "You will hear:\nWhy are you late?",
         "audio": "https://data.dunno.ai/uploads/intro/part_ii_intro.mp3",
@@ -33,7 +33,7 @@ export const partIntros: ObjectKey<IntroPart> = {
         "created_at": "2021-08-04 03:19:08",
         "updated_at": "2021-08-04 03:19:08"
     },
-    3: {
+    2: {
         "id": 3,
         "title": "",
         "audio": "https://data.dunno.ai/uploads/intro/part_iii_intro.mp3",
@@ -44,7 +44,7 @@ export const partIntros: ObjectKey<IntroPart> = {
         "created_at": "2021-08-04 03:19:08",
         "updated_at": "2021-08-04 03:19:08"
     },
-    4: {
+    3: {
         "id": 4,
         "title": "",
         "audio": "https://data.dunno.ai/uploads/intro/part_iv_intro.mp3",
@@ -55,7 +55,7 @@ export const partIntros: ObjectKey<IntroPart> = {
         "created_at": "2021-08-04 03:19:08",
         "updated_at": "2021-08-04 03:19:08"
     },
-    5: {
+    4: {
         "id": 5,
         "title": "Example:\nThe mother held her newborn ____",
         "audio": "",
@@ -71,7 +71,7 @@ export const partIntros: ObjectKey<IntroPart> = {
         "created_at": "2021-08-04 03:19:08",
         "updated_at": "2021-08-04 03:19:08"
     },
-    7: {
+    6: {
         "id": 7,
         "title": "Example:\nAre you someone who enjoys trying new things and does not feel uncomfortable in new environment? Then why not get paid for it? CULTURE magazine is looking for individuals to go to ne",
         "audio": "",

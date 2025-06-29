@@ -6,4 +6,18 @@
 @defer {
   <app-modal-require-login />
   <app-notify />
+  <app-add-word-note />
+  <app-modal-search /> 
+}
+@if(showButton) {
+  <div
+    #searchBtn
+    [style.position]="'absolute'"
+    [style.top.px]="buttonTop"
+    [style.left.px]="buttonLeft"
+    style="background: white; border: 1px solid #aaa; padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000;"
+    (click)="searchSelectedText()"
+  >
+    🔍
+  </div>
 }

@@ -3,20 +3,22 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TestService } from '../../../shares/services/test.service';
 import { ChildQues, DetailTest, IntroPart, SaveHistoryTest } from '../../../common/interfaces/exam';
 import { CommonService } from '../../../shares/services/common.service';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, JsonPipe } from '@angular/common';
 import { ConvertListenScore, ConvertReadScore, partIntros } from '../../../shares/data/toeic';
 import { ObjectKey } from '../../../common/interfaces/common';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
 import { BASE_URL_PUBLIC } from '../../../shares/data/config';
 import { AudioComponent } from "../../../shares/components/audio/audio.component";
+import { DatatimePipe } from "../../../common/pipes/datatime.pipe";
 
 @Component({
     selector: 'app-detail-test',
     imports: [
-        SafePipe, 
-        AudioComponent,
-        RouterLink
-    ],
+    SafePipe,
+    AudioComponent,
+    RouterLink,
+    DatatimePipe
+],
     templateUrl: './detail-test.component.html',
     styleUrls: ['../../../shares/styles/button.css', './detail-test.component.css']
 })
@@ -29,6 +31,10 @@ export class DetailTestComponent {
     skillActive: number = 0;
     partActive: number = 0;
     quesActive: number = 0;
+
+    timeListen: number = 2700;
+    timeRead: number = 4500;
+    timeInterval: NodeJS.Timeout | undefined;
 
     baseUrl: string = BASE_URL_PUBLIC;
     partIntros: ObjectKey<IntroPart> = partIntros;
@@ -52,7 +58,7 @@ export class DetailTestComponent {
                         this.detailTest = res;
                         this.loading = false;
                         this.handleTest();
-                        console.log(this.detailTest);
+                        console.log(res);
                     }
                 })
             } else {
@@ -78,6 +84,14 @@ export class DetailTestComponent {
                 })
             })
         });
+
+        this.timeInterval = setInterval(() => {
+            if(this.skillActive < 1) {
+                this.timeListen--;
+            } else {
+                this.timeRead--;
+            }
+        }, 1000)
     }
 
 
@@ -94,6 +108,10 @@ export class DetailTestComponent {
                 if (this.skillActive < this.detailTest.skills.length - 1) {
                     this.skillActive++;
                     this.partActive = 0;
+                    clearInterval(this.timeInterval);
+                    this.timeInterval = setInterval(() => {
+                        this.timeRead--;
+                    })
                 }
             }
             this.commonService.scrollToTop();
@@ -146,5 +164,9 @@ export class DetailTestComponent {
             /src="(?!https?:\/\/|\/\/)([^"]+)"/g,
             (match, path) => `src="${domain}${path}"`
         );
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.timeInterval);
     }
 } 

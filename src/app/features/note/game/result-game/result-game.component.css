@@ -1,0 +1,40 @@
+.circular-chart {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+.circle-bg {
+    fill: none;
+    stroke: #f2f2f2;
+    stroke-width: 3;
+}
+.status-wrong .circle{
+    stroke: #CD3535;
+}
+.status-success .circle{
+    stroke: #0F8C66;
+}
+.circle {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+.result-text {
+    font-family: cursive, 'Courier New', Courier, monospace;
+}
+.status-wrong .result-text {
+    color: #CD3535;
+}
+.status-success .result-text {
+    color: #0F8C66;
+}
+.status-success .tag {
+    background-color: #EDFCF5;
+    color: #0F8C66;
+}
+.status-wrong .tag {
+    background-color: #FDF3F3;
+    color: #CD3535;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as CONFIG from "../data/config";
 import { HttpClient } from '@angular/common/http';
 import { ObjectKey } from '../../common/interfaces/common';
-import { of, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { CommonService } from './common.service';
 import { DataAddWord, DetailNotebook, Notebook, WordNotebook } from '../../common/interfaces/note';
 
@@ -83,10 +83,10 @@ export class NoteService {
         )
     }
 
-    getDetailNote(id: number) {
+    getDetailNote(id: number): Observable<DetailNotebook> {
         const url = CONFIG.BASE_URL + 'notebook/' + id;
         if (this.commonService.getDataCache(url)) return of(this.commonService.getDataCache(url));
-        return this.http.get(url).pipe(
+        return this.http.get<DetailNotebook>(url).pipe(
             tap(res => {
                 if (res) {
                     this.commonService.setDataCache(url, res);
@@ -100,11 +100,22 @@ export class NoteService {
         return this.http.post<WordNotebook>(url, data, CONFIG.HTTP_OPTION).pipe(
             tap(res => {
                 if (res.id) {
-                    if (this.detailNote) {
-                        this.detailNote.total++;
-                        this.detailNote.words.unshift(res);
+                    let detailNote = this.commonService.getLocal(CONFIG.BASE_URL + 'notebook/' + notebId);
+                    let list: Notebook[] | undefined = this.commonService.getLocal(CONFIG.BASE_URL + 'notebook/user');
+                    if (detailNote) {
+                        detailNote.total++;
+                        detailNote.words.unshift(res);
                     }
-                    this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/' + notebId, res);
+                    if(list && list.length) {
+                        let idxNote = list.findIndex(item => item.id === notebId);
+                        if (idxNote >= 0) {
+                            list[idxNote].total++;
+                        }
+                    }
+                    this.detailNote = detailNote;
+                    this.userNotes = list ? list : [];
+                    this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/' + notebId, this.detailNote);
+                    this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/user', this.userNotes);
                 }
             })
         );

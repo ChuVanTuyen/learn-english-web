@@ -1,0 +1,73 @@
+<div class="container mx-auto grid grid-cols-3 mt-6">
+    <div class="w-max">
+        <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook/detail/{{ noteId }}">
+            <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+            Trở về
+        </a>
+    </div>
+    <div class="text-center text-2xl font-semibold">Flashcard</div>
+</div>
+
+@if(listWordOrigin.length > 0) {
+    @if(listWord.length) {
+        <div class="container mx-auto flashcard">
+            <div class="box-flashcard mt-4">
+                @for (item of listWord; track item; let i = $index) {
+                    <div class="flip-card-wrap" [class]="{'point-ev-disabled': item.pEvent}" [style.zIndex]="listWord.length - i">
+                        <div class="flip-card" [class]="{'apply-flip': (item.flip)}" cdkDrag
+                            (cdkDragEnded)="onDragEnded($event, item)" 
+                            (cdkDragStarted)="onDragStarted($event)"
+                            (cdkDragMoved)="onDragMoved($event, item)"
+                        >
+                            <div class="flip-card-inner" [class.shadow]="i < 2">
+                                <div class="flip-card-front card-front flex" (click)="toggleFlip(item)">
+                                    <ng-container [ngTemplateOutlet]="ngContentCard" [ngTemplateOutletContext]="{ word: item, front: true}"></ng-container>
+                                </div>
+                                <div class="flip-card-back card-back flex" (click)="toggleFlip(item)">
+                                    <ng-container [ngTemplateOutlet]="ngContentCard" [ngTemplateOutletContext]="{ word: item, front: false}"></ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                 
+            </div>
+            <div class="progress-bar mx-auto flex-grow-1 mt-[32px]">
+                <div class="progress success" [style.width.%]="(total - listWord.length) / total * 100"></div>
+            </div>
+            <div class="flex items-center justify-between box-remember mx-auto mt-4">
+                <div class="box-count left flex items-center justify-center">{{ forget }}</div>
+                <div class="box-count flex items-center justify-center cursor-pointer" title="Detail">
+                    <img width="28" src="/images/icons/ic_info.png" alt="Detail">
+                </div>
+                <div class="box-count flex items-center justify-center right">{{ total - listWord.length }}</div>
+            </div>
+        </div>
+    } @else {
+        <app-result-game [words]="words" [result]="resultGame" />
+    }
+} 
+
+<ng-template #ngContentCard let-word="word" let-front="front">
+    @if(word.status === 1) {
+        <div class="card-top review">Thử lại</div>
+    } @else if(word.status === 2) {
+        <div class="card-top done">Tôi nhớ rồi</div>
+    }
+    <div class="infor flex">
+        <p class="txt-word behind mt-0" [class]="{
+            'medium': word.word.length > 23, 
+            'small': word.word.length > 46, 
+            'scrollbar-common': word.word.length > 120
+        }">
+            {{ word.word }}
+        </p>
+        @if(!front) {
+            @if(word.pronounce) {
+                <p class="pinyin">[ {{ word.pronounce }} ]</p>
+            }
+            <p class="mean">{{ word.mean }}</p>
+        }
+
+    </div>
+</ng-template>

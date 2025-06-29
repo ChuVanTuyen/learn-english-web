@@ -31,7 +31,7 @@
                             (click)="openSearch(item.word)"
                         >
                             <span>{{ item.word }} [{{ item.pronounce }}]</span>
-                            @if(item.content[0].kind_content[0].means) {
+                            @if(item.content && item.content[0].kind_content && item.content[0].kind_content[0].means) {
                                 <div class="font-medium">{{ item.content[0].kind_content[0].means }}</div>
                             }
                         </div>
