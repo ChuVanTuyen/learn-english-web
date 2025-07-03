@@ -25,10 +25,10 @@
 </div>
 
 <ng-template #ngListNotebook let-list="list" let-title="title" let-canEdit="canEdit">
-    <div class="md:grid md:grid-cols-6 gap-3 mt-4 shadow-[4px_4px_15px_#ffffff08_inset] bg-white border border-[#F2F2F2] w-full p-4 rounded-3xl border-solid">
+    <div class="grid grid-cols-6 gap-3 mt-4 shadow-[4px_4px_15px_#ffffff08_inset] bg-white border border-[#F2F2F2] w-full p-4 rounded-3xl border-solid">
         <div class="col-span-6 font-semibold text-lg">{{ title }}</div>
         @for (item of list; track $index) {
-            <a routerLink="/notebook/detail/{{ item.id }}" class="bg-[#F2F2F2] p-4 block rounded-xl md:col-span-2 relative">
+            <div (click)="openNotebook(item.id)" class="bg-[#F2F2F2] p-4 block rounded-xl col-span-6 sm:col-span-3 md:col-span-2 relative">
                 <div class="font-semibold">{{ item.name }}</div>
                 <div class="mt-1">{{ item.total }} từ</div>
                 @if(canEdit) {
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 }
-            </a>
+            </div>
         }
     </div>
 </ng-template>

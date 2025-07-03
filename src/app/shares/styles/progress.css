@@ -7,6 +7,9 @@
     border-radius: 8px;
     width: 100%;
 }
+.progress-bar .progress.primary {
+    background-color: var(--color-primary);
+}
 .progress-bar .progress.success {
     background-color: var(--color-success);
 }

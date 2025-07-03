@@ -2,6 +2,10 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
+    path: 'ebook/**',
+    renderMode: RenderMode.Server
+  },
+  {
     path: 'dictionary/**',
     renderMode: RenderMode.Server
   },

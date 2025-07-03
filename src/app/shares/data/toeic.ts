@@ -296,3 +296,5 @@ export const ConvertListenScore = [
    495,
    495
 ]
+
+export const TOTAL_QUES = [6, 25, 39, 30, 30, 16, 64];

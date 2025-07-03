@@ -7,6 +7,10 @@ import { NotebookRoutes } from './features/note/note.routes';
 
 export const routes: Routes = [
     { 
+        path: 'ebook', 
+        loadComponent: () => import('./features/ebook/ebook.component').then(m => m.EbookComponent)
+    },
+    { 
         path: 'dictionary', 
         children: DictionaryRoutes
     },

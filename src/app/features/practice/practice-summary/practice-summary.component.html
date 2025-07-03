@@ -1,12 +1,12 @@
-<div class="min-h-[80vh] container mx-auto md:grid md:grid-cols-2 gap-4 mt-8">
-    <div class="bg-white rounded-md p-6 flex flex-col justify-between">
+<div class="container mx-auto grid grid-cols-2 gap-4 mt-8">
+    <div class="col-span-2 lg:col-span-1 bg-white rounded-md p-6 flex flex-col justify-between">
         <div>
             <div class="font-semibold text-xl mb-3">Toeic part {{ part }}</div>
             <div>TOEIC Listening Part 1 là nội dung nhìn tranh và miêu tả. </div>
             <div>Phần này gồm 10 bức tranh (đề mới: 6 bức tranh), mỗi bức tranh sẽ có 4 câu mô tả không được in trong đề.</div>
             <div>Nhiệm vụ của các bạn là nghe và chọn đáp án mô tả đúng bức tranh nhất.</div>
         </div>
-        <div class="bg-[#F2F2F2] grid grid-cols-2 gap-3 w-full max-w-[450px] mx-auto rounded-2xl p-4">
+        <div class="bg-[#F2F2F2] grid grid-cols-2 gap-3 w-full max-w-[450px] mx-auto rounded-2xl p-4 my-4">
             <div>
                 <div class="mb-2 text-center">Chế độ kiểm tra</div>
                 <div class="setting-toggle setting-item-child mx-auto" [class.active]="practiceService.testMode" (click)="toggleCheck()">
@@ -16,7 +16,7 @@
             <div>
                 <div class="mb-2 text-center">Số lượng câu</div>
                 <select class="block setting-item-select mx-auto" [(ngModel)]="practiceService.numQues" (ngModelChange)="hanldeTime()">
-                    @for (item of arrNumQues[part]; track $index) {
+                    @for (item of arrNumQues[part - 1]; track $index) {
                         <option [ngValue]="item">{{ item }}</option>
                     }
                 </select>
@@ -27,9 +27,9 @@
             <button class="btn-danger">Làm lại câu sai</button>
         </div>
     </div>
-    <div class="md:grid md:grid-cols-2 gap-4">
-        @if(summary) {
-            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
+    <div class="col-span-2 lg:col-span-1 md:grid md:grid-cols-2 md:gap-4">
+        @if(summary && summary.done_questions[part]) {
+            <div class="my-4 md:my-0 bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
                 <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
                     Hoàn thành
                 </span>
@@ -41,7 +41,7 @@
                     <div class="h-full bg-[var(--color-primary)]" [style.width.%]="(summary.done_questions[part].length / totalQues[part - 1] * 100) | number:'1.0-0'"></div>
                 </div>
             </div>
-            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
+            <div class="my-4 md:my-0 bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
                 <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
                     Tỉ lệ đúng
                 </span>
@@ -52,7 +52,7 @@
                 </div>
             </div>
         } @else {
-            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
+            <div class="my-4 md:my-0 bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-primary)]">
                 <span class="col-span-2 mb-2 text-[var(--color-primary)] text-sm uppercase font-semibold">
                     Hoàn thành
                 </span>
@@ -64,7 +64,7 @@
                     <div class="h-full bg-[var(--color-primary)]" [style.width.%]="0"></div>
                 </div>
             </div>
-            <div class="bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
+            <div class="my-4 md:my-0 bg-white rounded-md p-[20px] grid grid-cols-[60px_1fr_40px] items-center border-l-4 border-l-[var(--color-success)]">
                 <span class="col-span-2 mb-2 text-[var(--color-success)] text-sm uppercase font-semibold">
                     Tỉ lệ đúng
                 </span>

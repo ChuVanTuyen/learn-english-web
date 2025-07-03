@@ -17,9 +17,28 @@
             <img class="me-1 icon" width="18" src="/images/icons/ic_exam.png" alt="Thi thử">
             Thi thử
         </a>
+        <a class="header-link flex items-center" [routerLink]="'/ebook'" routerLinkActive="active">
+            <img class="me-1 icon" width="18" src="/images/icons/ic_dictionary.png" alt="Tài liệu">
+            Tài liệu
+        </a>
     </div>
-    <div class="title-page-mb content-center">
+    <div class="title-page-mb flex items-center justify-center">
         @switch (currentUrl) {
+            @case ('/register') {
+                Đăng ký
+            }
+            @case ('/login') {
+                Đăng nhập
+            }
+            @case ('/notebook') {
+                Sổ tay
+            }
+            @case ('/practice') {
+                Luyện tập
+            }
+            @case ('/dictionary') {
+                Từ điển
+            }
             @case ('/exam') {
                 Thi thử
             }
@@ -28,24 +47,21 @@
             }
         }
     </div>
-    <div class="header-auth flex justify-end">
+    <div class="header-auth flex justify-end items-center">
         @if(commonService.sUser(); as user) {
             <div class="flex items-center relative box-user">
                 <span class="text-name">{{ user.name }}</span>
-                <img class="ms-2 user-avatar" width="36" height="36" [src]="user.avatar ? user.avatar : '/images/icons/ic_avatar.png'" alt="avatar">
+                <img class="ms-2 mr-2 md:mr-0 user-avatar" width="36" height="36" [src]="user.avatar ? user.avatar : '/images/icons/ic_avatar.png'" alt="avatar">
                 <div class="absolute cursor-pointer items-center btn-logout bg-white w-max px-3 py-1 rounded-lg top-[99%]" (click)="logout()">
                     <span>Đăng xuất</span>
                 </div>
             </div>
         } @else {
-            <a class="btn-primary flex items-center" routerLink="/auth/login">Đăng nhập</a>
+            <a class="btn-primary flex items-center mr-2" routerLink="/auth/login">Đăng nhập</a>
             <a class="btn register" routerLink="/auth/register">Đăng ký</a>
         }
-        <div class="box-auth box-menu content-center me-2" (click)="menuMbActive = !menuMbActive">
+        <div class="box-auth box-menu flex items-center justify-center" (click)="menuMbActive = !menuMbActive">
             <img src="/images/icons/ic_menu.png" alt="Menu">
-        </div>
-        <div class="box-auth content-center">
-            <img src="/images/icons/ic_user.png" alt="Tài khoản">
         </div>
     </div>
 </header>

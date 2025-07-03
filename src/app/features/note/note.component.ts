@@ -6,7 +6,7 @@ import { CommonService } from '../../shares/services/common.service';
 import { AddNoteComponent } from "./add-note/add-note.component";
 import { EditNoteComponent } from "./edit-note/edit-note.component";
 import { ModalComponent } from "../../shares/modals/modal/modal.component";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-note',
@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
         '../../shares/styles/button.css',
         './note.component.css'
     ],
-    imports: [NgTemplateOutlet, AddNoteComponent, EditNoteComponent, ModalComponent, RouterLink]
+    imports: [NgTemplateOutlet, AddNoteComponent, EditNoteComponent, ModalComponent]
 })
 export class NoteComponent {
 
@@ -26,7 +26,8 @@ export class NoteComponent {
 
     constructor(
         private noteService: NoteService,
-        protected readonly commonService: CommonService
+        protected readonly commonService: CommonService,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -56,7 +57,7 @@ export class NoteComponent {
     }
 
     handleAction(action: string, idx: number, e: Event) {
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         this.idxAction = idx;
         if(action === 'edit') {
             this.commonService.openModal('modal-edit-notebook');
@@ -79,4 +80,8 @@ export class NoteComponent {
             }
         })
     } 
+
+    openNotebook(id: number) {
+        this.router.navigate(['/notebook/detail/' + id]);
+    }
 }

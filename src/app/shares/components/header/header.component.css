@@ -32,7 +32,7 @@
 .box-auth > img {
     width: 20px;
 }
-@media screen and (max-width: 1199.98px) {
+@media screen and (max-width: 767.98px) {
     .header-auth .btn {
         display: none;
     }
@@ -58,11 +58,11 @@
 .box-user:hover .btn-logout {
     display: flex;
 }
-@media screen and (max-width: 683px) {
+@media screen and (max-width: 767.98px) {
     .box-header {
         display: flex;
         position: relative;
-        z-index: 9;
+        z-index: 12;
         margin-top: 8px;
     }
     .logo {
@@ -75,7 +75,7 @@
         width: 100%;
         left: 0;
         top: 55%;
-        padding: 0 12px 12px;
+        padding: 0;
         z-index: -1;
         border-radius: 0 0 16px 16px;
         max-height: 0vh;

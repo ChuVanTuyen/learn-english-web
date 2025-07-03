@@ -3,18 +3,22 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PracticeService } from '../../../shares/services/practice.service';
 import { ChildQues, Question } from '../../../common/interfaces/exam';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
-import { BASE_URL } from '../../../shares/data/config';
+import { BASE_URL_PUBLIC } from '../../../shares/data/config';
 import { DOCUMENT } from '@angular/common';
 import { HistoryPractice, PracticeSummary } from '../../../common/interfaces/practice';
 import { DatatimePipe } from "../../../common/pipes/datatime.pipe";
+import { CommonService } from '../../../shares/services/common.service';
 
 @Component({
     selector: 'app-doing-practice',
     imports: [
-    SafePipe,
-    RouterLink,
-    DatatimePipe
-],
+        SafePipe,
+        RouterLink,
+        DatatimePipe,
+    ],
+    providers: [
+        { provide: DOCUMENT, useValue: document }
+    ],
     templateUrl: './doing-practice.component.html',
     styleUrls: [
         '../../../shares/styles/button.css',
@@ -29,7 +33,8 @@ export class DoingPracticeComponent {
     constructor(
         private route: ActivatedRoute,
         protected readonly practiceService: PracticeService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private commonService: CommonService
     ) {}
 
     ngOnInit() {
@@ -41,7 +46,7 @@ export class DoingPracticeComponent {
                     let idx = 0;
                     this.listQuestion.forEach(ques => {
                         if (ques.text_read.includes('src=')) {
-                            ques.text_read = this.addDomain(ques.text_read, BASE_URL);
+                            ques.text_read = this.addDomain(ques.text_read, BASE_URL_PUBLIC);
                         }
                         ques.child_ques.forEach(child => {
                             idx++;
@@ -49,6 +54,10 @@ export class DoingPracticeComponent {
                             child.idx = idx;
                         })
                     })
+                },
+                error: (err) => {
+                    console.log('bug');
+                    console.log(err);
                 }
             })
             
@@ -112,7 +121,12 @@ export class DoingPracticeComponent {
             })
         });
         this.practiceService.savePracticeSummary(summaryPractice, dataSend).subscribe({
-            next: res => {}
+            next: res => {
+                this.commonService.showNotify('Nộp bài thành công', 'success');
+            },
+            error: err => {
+                this.commonService.showNotify('Đã có lỗi xảy ra', 'danger');
+            }
         })
     }
 }

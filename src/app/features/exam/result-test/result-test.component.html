@@ -11,18 +11,17 @@
             Tùy chọn
             <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
         </div>
-    </div>.
+    </div>
     @if(detailTest) {
-        <div class="gap-3">
-            <div class="col-span-3">
+        <div class="grid grid-cols-4 gap-3">
+            <div class="col-span-4 lg:col-span-3">
                 @for (skill of detailTest.skills; track skill; let skillIdx = $index) {
                     @for (part of skill.parts; track part; let partIdx = $index) {
                         <div class="grid gap-3 grid-cols-[40px_1fr] items-center px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
                             <div class="p-2 rounded-full bg-[var(--color-primary)]">
                                 <img class="w-6" src="/images/icons/ic_headphone.png" alt="Listen">
                             </div>
-                            <div class="align-middle font-semibold text-lg">Part {{ partIdx + 1 }}: {{
-                                part.name }}</div>
+                            <div class="align-middle font-semibold text-lg">Part {{ partIdx + 1 }}: {{ part.name }}</div>
                         </div>
                         <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
                             <div>{{ part.title }}</div>
@@ -90,7 +89,72 @@
                     }
                 }
             </div>
-            <div>
+            <div class="col-span-4 lg:col-span-1">
+                <div class="mb-3 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl status-{{ history.score >= 500 ? 'success' : 'wrong' }}">
+                    <div class="font-semibold">{{ detailTest.name }}</div>
+                    <div class="relative">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle-bg"></path>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle" [attr.stroke-dasharray]="((history.score / 990 * 100) | number:'1.0-0') + ', 100'"></path>
+                        </svg>
+                        <div class="text-center absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4">
+                            <div class="result-text text-[34px] font-semibold leading-[42px]">
+                                {{ history.score }}
+                            </div>
+                            <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full tag w-max mx-auto">
+                                {{ history.score >= 500 ? 'Đạt' : 'Chưa đạt' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center text-sm mt-2">
+                        <div class="text-center">
+                            <div class="text-[#595959]">Chính xác</div>
+                            <div class="font-semibold">{{ history.correct_read + history.correct_listen }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-[#595959]">Thời gian</div>
+                            <div class="font-semibold">{{ history.time | datatime:'h:mm:ss' }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-[#595959]">Câu hỏi</div>
+                            <div class="font-semibold">200</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 rounded-3xl bg-white mb-3">
+                    <div class="flex items-center">
+                        <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
+                        <span>Nghe ({{ history.correct_listen}} / 100)</span>
+                    </div>
+                    @for (item of correctPart | slice:0:4; track $index) {
+                        <div class="grid grid-cols-12 gap-2 items-center">
+                            <div class="col-span-4">Part {{ $index + 1 }}</div>
+                            <div class="progress-bar col-span-6">
+                                @if(item > 0) {
+                                    <div class="progress primary" [style.width.%]="item / totalQues[$index] * 100"></div>
+                                }
+                            </div>
+                            <div class="col-span-2">{{ (item / totalQues[$index] * 100) | number:'1.0-0' }}%</div>
+                        </div>
+                    }
+                </div>
+                <div class="p-3 rounded-3xl bg-white mb-3">
+                    <div class="flex items-center">
+                        <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
+                        <span>Nghe ({{ history.correct_read}} / 100)</span>
+                    </div>
+                    @for (item of correctPart | slice:4:8; track $index) {
+                        <div class="grid grid-cols-12 gap-2 items-center">
+                            <div class="col-span-4">Part {{ $index + 5 }}</div>
+                            <div class="progress-bar col-span-6">
+                                @if(item > 0) {
+                                    <div class="progress primary" [style.width.%]="item / totalQues[$index + 4] * 100"></div>
+                                }
+                            </div>
+                            <div class="col-span-2">{{ (item / totalQues[$index + 4] * 100) | number:'1.0-0' }}%</div>
+                        </div>
+                    }
+                </div>
                 <div class="sticky top-3 overflow-y-auto h-[calc(100vh_-_165px)] hide-scroll-bar rounded-3xl">
                     @for (skill of detailTest.skills; track skill) {
                         <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
@@ -112,5 +176,10 @@
                 </div>
             </div>
         </div>
+    } @else {
+        <div class="min-h-[80vh]">
+            <div class="loader"></div>
+        </div>
     }
 </div>
+.

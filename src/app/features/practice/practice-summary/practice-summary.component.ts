@@ -76,6 +76,7 @@ export class PracticeSummaryComponent {
     ngOnInit() {
         this.route.paramMap.subscribe(param => {
             this.part = Number(param.get('part'));
+            this.practiceService.numQues = this.arrNumQues[this.part - 1][0];
             this.hanldeTime();
             this.loading = true;
             this.practiceService.getPracticeSummary(this.part).subscribe({

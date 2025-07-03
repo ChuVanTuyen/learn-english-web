@@ -1,18 +1,22 @@
 @let user = commonService.sUser();
 <div class="container mx-auto">
     @if(detailNote) {
-        <div class="flex justify-between items-center mt-4 mb-3">
-            <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook">
-                <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
-                Trở về
-            </a>
+        <div class="flex items-center justify-between mt-4 mb-3">
+            <div>
+                <a class="w-max flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook">
+                    <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+                    <span class="hidden md:inline">Trở về</span>
+                </a>
+            </div>
             <div class="text-center">
                 <div class="text-2xl font-medium">{{ detailNote.name }}</div>
                 <div class="mt-2 text-[#595959]">{{ detailNote.total }} từ &#8226; {{ detailNote.created_at | date:'yyyy.MM.dd | hh:mm' }}</div>
             </div>
-            <div class="flex items-center bg-white rounded-full px-4 py-2">
-                Tùy chọn
-                <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
+            <div class="opacity-0 pointer-events-none touch-none">
+                <a class="w-max flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook">
+                    <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
+                    <span class="hidden md:inline">Trở về</span>
+                </a>
             </div>
         </div>
 
@@ -28,41 +32,56 @@
         } @else {
             <div class="min-h-[70vh]">
                 <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-9 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                    <div class="col-span-12 order-2 lg:col-span-9 lg:order-1 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
                         @if(detailNote.user_id === user?.id) {
-                            <div (click)="openAddWord()" class="cursor-pointer bg-[#F2F2F2] rounded-full w-max mb-3 py-2 px-5 flex items-center mt-4">
+                            <div (click)="openAddWord()" class="cursor-pointer bg-[#F2F2F2] rounded-full w-max mb-3 py-2 px-5 flex items-center">
                                 <img class="w-5 h-5 mr-2" src="/images/icons/ic_plus_black.svg" alt="Add notebook">
                                 <span>Thêm từ</span>
                             </div>
                         }
-                        <div class="grid grid-cols-3 gap-3">
-                            @for (word of detailNote.words; track $index) {
-                                <div class="bg-[#f2f2f2] relative p-3 rounded-[20px] cursor-pointer" (click)="openModalSearch(word.word)">
-                                    <div class="font-medium text-lg">{{ word.word }}</div>
-                                    @if(word.pronounce) {
-                                        <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
-                                    }
-                                    <div class="mt-1 two-line">{{ word.mean }}</div>
-                                    @if(detailNote.user_id === user?.id) {
-                                        <div class="w-6 h-6 absolute top-3 right-3 box-action-wrap cursor-pointer">
-                                            <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
-                                            <div class="box-action">
-                                                <div (click)="handleActionWord('edit', word, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
-                                                    <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
-                                                    <span>Sửa</span>
-                                                </div>
-                                                <div (click)="handleActionWord('delete', word, $event)" class="flex items-center gap-1">
-                                                    <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
-                                                    <span class="text-[#CD3535]">Xóa</span>
-                                                </div>
+                        <div class="grid grid-cols-6 gap-3">
+                            @if(loading) {
+                                <div class="min-h-[40vh] relative col-span-6">
+                                    <div class="loader"></div>
+                                </div>
+                            } @else {
+                                @for (word of listWords; track $index) {
+                                    <div class="col-span-6 sm:col-span-3 md:col-span-2 bg-[#f2f2f2] relative p-3 rounded-[20px] cursor-pointer" (click)="openModalSearch(word.word)">
+                                        <div class="flex items-start justify-between">
+                                            <div class="font-medium text-lg">{{ word.word }}</div>
+                                            <div class="flex items-center min-w-max">
+                                                <img (click)="playAudio(word.word, $event)" class="w-6 h-6 mr-1" src="/images/icons/ic_speaker.svg" alt="Audio">
+                                                @if(detailNote.user_id === user?.id) {
+                                                    <div class="w-6 h-6 relative box-action-wrap cursor-pointer">
+                                                        <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
+                                                        <div class="box-action">
+                                                            <div (click)="handleActionWord('edit', word, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
+                                                                <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
+                                                                <span>Sửa</span>
+                                                            </div>
+                                                            <div (click)="handleActionWord('delete', word, $event)" class="flex items-center gap-1">
+                                                                <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
+                                                                <span class="text-[#CD3535]">Xóa</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
-                                    }
-                                </div>
+                                        @if(word.pronounce) {
+                                            <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
+                                        }
+                                        <div class="mt-1 two-line">{{ word.mean }}</div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
-                    <div class="col-span-3">
+                    <div class="col-span-12 order-1 lg:col-span-3 lg:order-2">
+                        <div class="relative mb-3">
+                            <img class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2" src="/images/icons/ic_search.png" alt="Search">
+                            <input [(ngModel)]="query" (ngModelChange)="filterSearch()" class="text-sm rounded-2xl w-full border bg-white pl-[52px] pr-5 py-3 border-solid border-[#f2f2f2]" type="text" placeholder="Tìm kiếm">
+                        </div>
                         <a routerLink="/notebook/detail/{{ detailNote.id }}/practice" class="block relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
                             <div class="text-lg font-medium">Ôn tập</div>
                             <div class="w-max text-[#CD3535] bg-[#FDF3F3] mt-6 text-sm font-medium leading-4 px-2 py-1 rounded-full">Mới</div>

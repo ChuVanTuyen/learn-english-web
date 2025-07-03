@@ -1,0 +1,16 @@
+<div class="container mx-auto">
+    <div class="text-lg font-semibold text-center my-4">Tài liệu học tiếng Anh</div>
+    <div class="grid grid-cols-2 gap-4">
+        @for (book of list; track book) {
+            <div class="bg-white relative p-4 rounded-2xl grid grid-cols-3 gap-3 col-span-2 xl:col-span-1">
+                <img class="rounded-xl aspect-[416/554]" [src]="originUrl + book.thumbnail" alt="Book">
+                <div class="col-span-2">
+                    <div class="font-semibold mb-2">{{ book.title }}</div>
+                    <div class="mb-3">Tác giả: <span class="font-semibold">{{ book.author }}</span></div>
+                    <div class="text-[#595959]">{{ book.description }}</div>
+                    <a class="xl:absolute bottom-4 right-4 text-blue-600 hover:underline" [href]="originUrl + book.pdf" target="_blank">Xem chi tiết</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

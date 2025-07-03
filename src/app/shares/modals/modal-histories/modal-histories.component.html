@@ -23,7 +23,7 @@
                         }
                     </td>
                     <td>
-                        <a class="" routerLink="/exam/history/{{ examId }}-{{ history.id }}">Xem chi tiết</a>
+                        <a (click)="commonService.closeModal('modal-histories')" routerLink="/exam/history/{{ examId }}-{{ history.id }}">Xem chi tiết</a>
                     </td>
                 </tr>
             }
