@@ -14,8 +14,13 @@
         <div class="md:col-span-3">
             @for (ques of listQuestion; track $index) {
                 <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
+                    @if(ques.audio) {
+                        <div class="w-full h-[38px] mb-2">
+                            <app-audio [audioUrl]="baseUrl + ques.audio" [autoPlay]="false" />
+                        </div>
+                    }
                     @if(ques.image) {
-                        <img class="block max-w-[390px] mx-auto" [src]="ques.image" alt="Intro">
+                        <img class="block max-w-[390px] mx-auto" [src]="baseUrl + ques.image" alt="Intro">
                     }
                     @if(ques.text_read) {
                         <div [innerHTML]="ques.text_read | safe:'html'"></div>
@@ -26,15 +31,39 @@
                             <span [innerHTML]="child.title"></span>
                         </div>
                         @if(child.image) {
-                            <img class="max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
+                            <img class="max-w-[390px] mx-auto" [src]="baseUrl + child.image" [alt]="child.id">
                         }
                         <div class="grid gap-3 grid-cols-2 mt-3">
                             @for (answer of child.answers; track answer;let ansIdx = $index) {
-                                <div class="btn-answer" [class.active]="ansIdx === child.selected" (click)="chooseAns(child, ansIdx)">
+                                <div class="btn-answer" [class.active]="ansIdx === child.selected" (click)="chooseAns(child, ansIdx)"
+                                    [class]="{
+                                        'active': (submitted || !practiceService.testMode) && child.selected > -1 && ansIdx === child.selected,
+                                        'success': (submitted || !practiceService.testMode) && child.selected > -1 && ansIdx === child.correct_answer,
+                                        'fail': (submitted || !practiceService.testMode) && child.selected > -1 && ansIdx === child.selected && child.selected !== child.correct_answer,
+                                    }"
+                                >
                                     {{ answer }}
                                 </div>
                             }
                         </div>
+
+                        @if(submitted || !practiceService.testMode && child.selected > -1) {
+                            <div class="text-[var(--color-primary)] font-semibold mt-3">Giải thích</div>
+                            @if(!childIdx) {
+                                @if(ques.text_audio) {
+                                    <div class="ps-2 font-semibold">Audio: </div>
+                                    <div class="ps-2 italic whitespace-pre-line" [innerHTML]="ques.text_audio"></div>
+                                }
+                                @if(ques.text_audio_trans) {
+                                    <div class="ps-2 font-semibold">Dịch: </div>
+                                    <div class="ps-2 whitespace-pre-line" [innerHTML]="ques.text_audio_trans"></div>
+                                }
+                            }
+                            @if(child.explains) {
+                                <div class="ps-2" [innerHTML]="child.explains"></div>
+                            }
+                        }
+                        
                     }
                 </div>
             }
@@ -44,7 +73,9 @@
                 <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
                     <div class="flex items-center">
                         <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
-                        <div>{{ practiceService.time | datatime:'h:mm:ss' }}</div>
+                        @if(practiceService.testMode) {
+                            <div>{{ (practiceService.time - timeDown) | datatime:'h:mm:ss' }}</div>
+                        }
                     </div>
                     <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
                 </div>
@@ -53,7 +84,11 @@
                         @for (ques of listQuestion; track ques; let quesIdx = $index) {
                             @for (child of ques.child_ques; track child; let childIdx = $index) {
                                 <div class="question-item" (click)="chooseQuestion(child.idx)"
-                                    [class.active]="child.selected > -1"
+                                    [class]="{
+                                        'active': child.selected > -1,
+                                        'success': !practiceService.testMode && child.selected > -1 && child.isCorrect,
+                                        'fail': !practiceService.testMode && child.selected > -1 && !child.isCorrect,
+                                    }"
                                 >
                                     {{ child.idx }}
                                 </div>

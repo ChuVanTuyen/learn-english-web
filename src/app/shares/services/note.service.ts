@@ -125,7 +125,6 @@ export class NoteService {
         const url = CONFIG.BASE_URL + 'notebook/word/' + id;
         return this.http.delete(url).pipe(
             tap(res => {
-                console.log(res);
                 if (this.detailNote) {
                     let idx = this.detailNote.words.findIndex(item => item.id === id);
                     if (idx >= 0) {

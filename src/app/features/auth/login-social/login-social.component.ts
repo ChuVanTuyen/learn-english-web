@@ -22,7 +22,6 @@ export class LoginSocialComponent {
   ngAfterViewInit() { // chưa có client_id
     if (this.commonService.getEnvironment() == 'client') {
       this.lazyload.loadScript('https://accounts.google.com/gsi/client').subscribe(res => {
-        console.log(27);
         const that = this;
         if(typeof google !== 'undefined') {
           google.accounts.id.initialize({

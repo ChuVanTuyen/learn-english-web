@@ -81,9 +81,9 @@ export class PracticeSummaryComponent {
             this.loading = true;
             this.practiceService.getPracticeSummary(this.part).subscribe({
                 next: res => {
-                    console.log(res);
                     this.history = res.history;
                     this.summary = res.summary;
+                    this.practiceService.summary = res.summary;
                     let lineTime: any = [], lineCorrect: any[] = [];
                     res.history.forEach((his, idx) => {
                         lineCorrect.push({ y: Math.floor(his.correct / his.total * 100), x: idx + 1 });

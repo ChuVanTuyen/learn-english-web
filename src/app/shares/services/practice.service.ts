@@ -14,12 +14,14 @@ export class PracticeService {
     numQues = 10;
     time: number = 0; // thời gian làm luyện tập
 
+    summary: PracticeSummary | undefined;
+
     constructor(
         private http: HttpClient
     ) { }
 
-    getQuestions(partId: number, limit: number) {
-        const url = CONFIG.BASE_URL + 'practice/list-question/' + partId + '/' + limit;
+    getQuestions(partId: number, limit: number, isAgainFailed: boolean) {
+        let url = CONFIG.BASE_URL + 'practice/' + (isAgainFailed ? 'list-question-failed/' : 'list-question/' ) + partId + '/' + limit;
         return this.http.get<Question[]>(url, CONFIG.HTTP_OPTION);
     }
 
@@ -34,6 +36,6 @@ export class PracticeService {
             summary: summary,
             history: history
         }
-        return this.http.post(url, data, CONFIG.HTTP_OPTION);
+        return this.http.post(url, data, { responseType: 'text'  });
     }
 }

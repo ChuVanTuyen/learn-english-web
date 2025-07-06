@@ -30,7 +30,6 @@ export class AddNoteComponent {
     }
 
     add() {
-        console.log('333');
         if(this.loading) return;
         this.submitted = true;
         if(!this.nameNote.trim()) {

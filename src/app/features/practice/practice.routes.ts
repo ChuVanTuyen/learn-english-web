@@ -4,7 +4,8 @@ export const PracticeRoutes: Routes = [
     {
         matcher: (url) => {
             const urlArr = ['1', '2', '3', '4', '5', '6', '7'];
-            if (url.length === 2 && urlArr.includes(url[0].path) && url[1].path === 'doing') {
+            const urlArr1 = ['doing', 'failed'];
+            if (url.length === 2 && urlArr.includes(url[0].path) && urlArr1.includes(url[1].path)) {
                 return { 
                     consumed: url, 
                     posParams: { 

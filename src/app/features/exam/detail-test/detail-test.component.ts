@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TestService } from '../../../shares/services/test.service';
 import { ChildQues, DetailTest, IntroPart, SaveHistoryTest } from '../../../common/interfaces/exam';
 import { CommonService } from '../../../shares/services/common.service';
-import { DOCUMENT, JsonPipe } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { ConvertListenScore, ConvertReadScore, partIntros } from '../../../shares/data/toeic';
 import { ObjectKey } from '../../../common/interfaces/common';
 import { SafePipe } from "../../../common/pipes/safe.pipe";
@@ -58,7 +58,6 @@ export class DetailTestComponent {
                         this.detailTest = res;
                         this.loading = false;
                         this.handleTest();
-                        console.log(res);
                     }
                 })
             } else {
@@ -153,7 +152,6 @@ export class DetailTestComponent {
 
         this.testService.saveHistoryExam(result, this.detailTest.id).subscribe({
             next: res => {
-                console.log(res);
                 this.commonService.showNotify('Nộp bài thành công', 'success');
             }
         });

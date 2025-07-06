@@ -10,7 +10,6 @@ export class AudioService {
     constructor() { }
 
     playAudio(value: string, voice: string = 'US') {
-        console.log('run');
         return new Promise((resolve) => {
             this.audioBrowser(value, `en-${voice}`)!.onend = resolve;
         });

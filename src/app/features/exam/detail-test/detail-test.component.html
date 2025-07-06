@@ -46,11 +46,11 @@
                     <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
                         @if(ques.audio) {
                             <div class="w-full h-[38px] mb-2">
-                                <app-audio [audioUrl]="baseUrl + 'public/exam/test' + testId + '/audio/' + ques.audio" [autoPlay]="false" />
+                                <app-audio [audioUrl]="baseUrl + ques.audio" [autoPlay]="false" />
                             </div>
                         }
                         @if(ques.image) {
-                            <img class="block max-w-[390px] mx-auto" [src]="baseUrl + 'public/exam/test' + testId + '/'  + ques.image" alt="Intro">
+                            <img class="block max-w-[390px] mx-auto" [src]="baseUrl + ques.image" alt="Intro">
                         }
                         @if(ques.text_read) {
                             <div [innerHTML]="ques.text_read | safe:'html'"></div>
