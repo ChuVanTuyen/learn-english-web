@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as CONFIG from "../data/config";
 import { HttpClient } from '@angular/common/http';
-import { ObjectKey } from '../../common/interfaces/common';
 import { Observable, of, tap } from 'rxjs';
 import { CommonService } from './common.service';
 import { DataAddWord, DetailNotebook, Notebook, WordNotebook } from '../../common/interfaces/note';
+import { BroadcasterService } from './broadcaster.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,12 +12,12 @@ import { DataAddWord, DetailNotebook, Notebook, WordNotebook } from '../../commo
 export class NoteService {
 
     detailNote: DetailNotebook | undefined;
-    userNotes: Notebook[] = [];
     urlCacheNote: string = CONFIG.BASE_URL + 'notebook/user';
 
     constructor(
         private http: HttpClient,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private broadcaster: BroadcasterService
     ) { }
 
     getDefaultNotebook() {
@@ -37,7 +37,6 @@ export class NoteService {
             tap(res => {
                 if (res) {
                     this.commonService.setDataCache(url, res);
-                    this.userNotes = res;
                 }
             })
         );
@@ -48,8 +47,9 @@ export class NoteService {
         return this.http.post<Notebook>(url, { name }, CONFIG.HTTP_OPTION).pipe(
             tap(res => {
                 if (res) {
-                    this.userNotes.unshift(res);
-                    this.commonService.setDataCache(this.urlCacheNote, this.urlCacheNote);
+                    let list = this.commonService.getDataCache(this.urlCacheNote);
+                    list.unshift(res);
+                    this.commonService.setDataCache(this.urlCacheNote, list);
                 }
             })
         );
@@ -60,11 +60,12 @@ export class NoteService {
         return this.http.put<Notebook>(url, { name, id }, CONFIG.HTTP_OPTION).pipe(
             tap(res => {
                 if (res) {
-                    let idxNote = this.userNotes.findIndex(item => item.id === res.id);
+                    let list: Notebook[] = this.commonService.getDataCache(this.urlCacheNote);
+                    let idxNote = list.findIndex(item => item.id === res.id);
                     if (idxNote >= 0) {
-                        this.userNotes[idxNote] = res;
+                        list[idxNote] = res;
                     }
-                    this.commonService.setDataCache(this.urlCacheNote, this.urlCacheNote);
+                    this.commonService.setDataCache(this.urlCacheNote, list);
                 }
             })
         );
@@ -74,11 +75,12 @@ export class NoteService {
         const url = CONFIG.BASE_URL + 'notebook/' + id;
         return this.http.delete(url).pipe(
             tap(res => {
-                let idxNote = this.userNotes.findIndex(item => item.id === id);
+                let list: Notebook[] = this.commonService.getDataCache(this.urlCacheNote);
+                let idxNote = list.findIndex(item => item.id === id);
                 if (idxNote >= 0) {
-                    this.userNotes.splice(idxNote, 1);
+                    list.splice(idxNote, 1);
                 }
-                this.commonService.setDataCache(this.urlCacheNote, this.urlCacheNote);
+                this.commonService.setDataCache(this.urlCacheNote, list);
             })
         )
     }
@@ -100,8 +102,8 @@ export class NoteService {
         return this.http.post<WordNotebook>(url, data, CONFIG.HTTP_OPTION).pipe(
             tap(res => {
                 if (res.id) {
-                    let detailNote = this.commonService.getLocal(CONFIG.BASE_URL + 'notebook/' + notebId);
-                    let list: Notebook[] | undefined = this.commonService.getLocal(CONFIG.BASE_URL + 'notebook/user');
+                    let detailNote = this.commonService.getDataCache(CONFIG.BASE_URL + 'notebook/' + notebId);
+                    let list: Notebook[] | undefined = this.commonService.getDataCache(CONFIG.BASE_URL + 'notebook/user');
                     if (detailNote) {
                         detailNote.total++;
                         detailNote.words.unshift(res);
@@ -113,9 +115,9 @@ export class NoteService {
                         }
                     }
                     this.detailNote = detailNote;
-                    this.userNotes = list ? list : [];
                     this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/' + notebId, this.detailNote);
-                    this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/user', this.userNotes);
+                    this.commonService.setDataCache(CONFIG.BASE_URL + 'notebook/user', list);
+                    this.broadcaster.broadcast('update-list-note', list)
                 }
             })
         );
@@ -129,9 +131,9 @@ export class NoteService {
                     let idx = this.detailNote.words.findIndex(item => item.id === id);
                     if (idx >= 0) {
                         this.detailNote.words.splice(idx, 1);
+                        this.detailNote.total --;
                     }
                 }
-                this.commonService.clearDataCache();
             })
         );
     }
@@ -147,7 +149,6 @@ export class NoteService {
                             this.detailNote.words[idx] = res;
                         }
                     }
-                    this.commonService.clearDataCache();
                 }
             })
         );

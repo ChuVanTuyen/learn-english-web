@@ -1,0 +1,36 @@
+@if (listIndex.length > 1) {
+    <nav [class.vertical]="direction === 'vertical'">
+        <ul class="pagination">
+            @if (showBtnPaginationPreviousLast) {
+                <li class="page-item" (click)="changePagination(0)">
+                    <a class="page-link theme-body2 h-[38px] flex items-center">
+                        <img width="10" src="/images/icons/ic_last_pre.png" alt="icon Migii">
+                    </a>
+                </li>
+                <li class="page-item" (click)="changePagination(indexPagination)">
+                    <a class="page-link theme-body2 h-[38px] flex items-center">
+                        <img width="10" src="/images/icons/ic_arrow_pre.png" alt="icon Migii">
+                    </a>
+                </li>
+            }
+            @for (pagination of listIndex; track pagination) {
+                <li class="page-item" (click)="changePagination(pagination.value)"
+                    [class]="{'active': (pagination.value === (indexPagination + 1))}">
+                    <a class="page-link theme-body2" [class.txt-pronounce]="pagination.value !== (indexPagination + 1)" [class.cl-tt]="pagination.value === (indexPagination + 1)">{{ pagination.label }}</a>
+                </li>
+            }
+            @if (showBtnPaginationNextLast) {
+                <li class="page-item" (click)="changePagination(indexPagination + 2)">
+                    <a class="page-link theme-body2 h-[38px] flex items-center">
+                        <img width="10" src="/images/icons/ic_arrow_next.png" alt="icon Migii">
+                    </a>
+                </li>
+                <li class="page-item" (click)="changePagination(this.listIndex[this.listIndex.length - 1].value)">
+                    <a class="page-link theme-body2 h-[38px] flex items-center">
+                        <img width="10" src="/images/icons/ic_last_next.png" alt="icon Migii">
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { LoginSocialComponent } from "./login-social/login-social.component";
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
   imports: [
-    LoginSocialComponent,
     RouterOutlet,
     RouterLink
   ],

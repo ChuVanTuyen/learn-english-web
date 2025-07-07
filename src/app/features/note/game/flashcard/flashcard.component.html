@@ -44,7 +44,7 @@
             </div>
         </div>
     } @else {
-        <app-result-game [words]="words" [result]="resultGame" />
+        <app-result-game [words]="words.slice(limit * (page -1), limit*page)" [result]="resultGame" />
     }
 } 
 

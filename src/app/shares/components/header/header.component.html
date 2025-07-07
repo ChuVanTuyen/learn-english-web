@@ -24,10 +24,10 @@
     </div>
     <div class="title-page-mb flex items-center justify-center">
         @switch (currentUrl) {
-            @case ('/register') {
+            @case ('/auth/register') {
                 Đăng ký
             }
-            @case ('/login') {
+            @case ('/auth/login') {
                 Đăng nhập
             }
             @case ('/notebook') {
@@ -57,8 +57,8 @@
                 </div>
             </div>
         } @else {
-            <a class="btn-primary flex items-center mr-2" routerLink="/auth/login">Đăng nhập</a>
-            <a class="btn register" routerLink="/auth/register">Đăng ký</a>
+            <a class="{{ currentUrl !== '/auth/register' ? 'btn-primary' : 'btn register' }} flex items-center mr-2" routerLink="/auth/login">Đăng nhập</a>
+            <a class="{{ currentUrl === '/auth/register' ? 'btn-primary' : 'btn register' }}" routerLink="/auth/register">Đăng ký</a>
         }
         <div class="box-auth box-menu flex items-center justify-center" (click)="menuMbActive = !menuMbActive">
             <img src="/images/icons/ic_menu.png" alt="Menu">

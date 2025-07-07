@@ -1,0 +1,13 @@
+<app-modal id="modal-edit-note-word">
+    <div class="fixed -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 max-w-[600px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+        <div class="font-semibold text-lg mb-4">Ghi chú</div>
+        <input type="text" placeholder="Nhập ghi chú cho từ" [(ngModel)]="noteWord" (keydown.enter)="update()" class="w-full h-10 font-normal leading-[21px] text-[#1f1f1f] bg-[#F2F2F2] border px-3 py-2 rounded-[20px] border-solid border-[#F2F2F2]">
+        <div class="flex items-center justify-end mt-4">
+            <div (click)="close()" class="bg-[#f2f2f2] w-[125px] h-[32px] rounded-full flex items-center justify-center mr-3 cursor-pointer">Hủy</div>
+            <div (click)="update()" class="btn login w-[125px] h-[32px] rounded-full flex items-center justify-center cursor-pointer">Xác nhận</div>
+        </div>
+        @if(loading) {
+            <div class="loader"></div>
+        }
+    </div>
+</app-modal>

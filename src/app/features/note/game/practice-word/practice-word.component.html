@@ -11,53 +11,55 @@
     @if(isShowResult) {
         <app-result-game [words]="listWordNote" [result]="resultGame" />
     } @else {
-        <div class="mt-6 mx-auto max-w-[890px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
-            <div class="h-2 bg-[#f2f2f2] w-full rounded-2xl">
-                <div class="h-full rounded-2xl bg-[#2C416D]" [style.width.%]="20"></div>
-            </div>
-    
-            <div class="mt-6 mb-4 font-semibold text-lg">{{ 1 }}. {{ questions[activeQues].question }}</div>
-            @if(questions[activeQues].type === 3) {
-                <div (click)="audioService.playAudio(questions[activeQues].word.word)" class="mx-auto cursor-pointer w-max border p-2 rounded-full border-solid border-[#e0e0e0] mb-4">
-                    <img class="w-[32px] h-[32px]" src="/images/icons/ic_speaker.svg" alt="Audio">
+        @if(questions) {
+            <div class="mt-6 mx-auto max-w-[890px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                <div class="h-2 bg-[#f2f2f2] w-full rounded-2xl">
+                    <div class="h-full rounded-2xl bg-[#2C416D] transition-all duration-[0.1s]" [style.width.%]="(activeQues + 1) / questions.length * 100 | number:'1.0-0'"></div>
                 </div>
-            }
-            <div class="grid-cols-2 grid gap-3">
-                @for (item of questions[activeQues].answers; track $index) {
-                    <div (click)="chooseAnswer($index)" class="answer-item p-2 active" [class]="{
-                        'active': !questions[activeQues].submit && questions[activeQues].choose === $index,
-                        'success': questions[activeQues].submit && questions[activeQues].word.id === item.id,
-                        'wrong': questions[activeQues].submit && item.id === questions[activeQues].answers[questions[activeQues].choose].id && item.id !== questions[activeQues].word.id
-                    }">
-                        <div class="text-lg font-medium">
-                            <div class="two-line w-full">{{ item.content }}</div>
-                        </div>
-                        @if((questions[activeQues].type === 2 || questions[activeQues].type === 3) && item.pronounce) {
-                            <div class="text-[#595959]">[ {{ item.pronounce }} ]</div>
-                        }
+        
+                <div class="mt-6 mb-4 font-semibold text-lg">{{ 1 }}. {{ questions[activeQues].question }}</div>
+                @if(questions[activeQues].type === 3) {
+                    <div (click)="audioService.playAudio(questions[activeQues].word.word)" class="mx-auto cursor-pointer w-max border p-2 rounded-full border-solid border-[#e0e0e0] mb-4">
+                        <img class="w-[32px] h-[32px]" src="/images/icons/ic_speaker.svg" alt="Audio">
                     </div>
                 }
+                <div class="grid-cols-2 grid gap-3">
+                    @for (item of questions[activeQues].answers; track $index) {
+                        <div (click)="chooseAnswer($index)" class="answer-item p-2 active" [class]="{
+                            'active': !questions[activeQues].submit && questions[activeQues].choose === $index,
+                            'success': questions[activeQues].submit && questions[activeQues].word.id === item.id,
+                            'wrong': questions[activeQues].submit && item.id === questions[activeQues].answers[questions[activeQues].choose].id && item.id !== questions[activeQues].word.id
+                        }">
+                            <div class="text-lg font-medium">
+                                <div class="two-line w-full">{{ item.content }}</div>
+                            </div>
+                            @if((questions[activeQues].type === 2 || questions[activeQues].type === 3) && item.pronounce) {
+                                <div class="text-[#595959]">[ {{ item.pronounce }} ]</div>
+                            }
+                        </div>
+                    }
+                </div>
+        
+                @if(questions[activeQues].submit) {
+                    <div class="btn-primary text-center mt-8" (click)="next()">Tiếp theo</div>
+                } @else {
+                    <div class="btn-primary text-center mt-8" (click)="check()">Kiểm tra</div>
+                }
             </div>
-    
             @if(questions[activeQues].submit) {
-                <div class="btn-primary text-center mt-8" (click)="next()">Tiếp theo</div>
-            } @else {
-                <div class="btn-primary text-center mt-8" (click)="check()">Kiểm tra</div>
+                <div class="mx-auto mt-3 max-w-[890px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                    <div class="font-semibold">Đáp án</div>
+                    <div class="text-lg font-medium text-[#2C416D]">{{ questions[activeQues].word.word }}</div>
+                    @if(questions[activeQues].word.pronounce) {
+                        <div class="text-[#595959]">[ {{ questions[activeQues].word.pronounce }} ]</div>
+                    }
+                    @if(questions[activeQues].word.kind) {
+                        <div>{{ questions[activeQues].word.kind }}</div>
+                    }
+                    <div class="font-medium">Ý nghĩa: {{ questions[activeQues].word.mean }}</div>
+                    
+                </div>
             }
-        </div>
-        @if(questions[activeQues].submit) {
-            <div class="mx-auto mt-3 max-w-[890px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
-                <div class="font-semibold">Đáp án</div>
-                <div class="text-lg font-medium text-[#2C416D]">{{ questions[activeQues].word.word }}</div>
-                @if(questions[activeQues].word.pronounce) {
-                    <div class="text-[#595959]">[ {{ questions[activeQues].word.pronounce }} ]</div>
-                }
-                @if(questions[activeQues].word.kind) {
-                    <div>{{ questions[activeQues].word.kind }}</div>
-                }
-                <div class="font-medium">Ý nghĩa: {{ questions[activeQues].word.mean }}</div>
-                
-            </div>
         }
     }
 </div>

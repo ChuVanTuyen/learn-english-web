@@ -130,11 +130,16 @@ body {
 .scrollbar-common::-webkit-scrollbar-thumb:hover {
     background: gray;
 }
-.two-line {
+.one-line, .two-line {
     overflow: hidden;
     display: -webkit-box!important;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.one-line {
+    -webkit-line-clamp: 1;
+}
+.two-line {
+    -webkit-line-clamp: 2;
 }
 
 vg-controls {

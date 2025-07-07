@@ -17,7 +17,7 @@ export class CommonService {
     environment: string = 'server';
     countryCode: string = '';
 
-    dataCache: ObjectKey<any> = {};
+    cache: ObjectKey<any> = {};
     pdfWidth: number = 0;
     constructor(
         private broadcaster: BroadcasterService,
@@ -116,15 +116,15 @@ export class CommonService {
     }
 
     getDataCache(key: string) {
-        return this.dataCache[key];
+        return this.cache[key];
     }
 
     setDataCache(key: string, value: any) {
-        this.dataCache[key] = value;
+        this.cache[key] = value;
     }
 
     clearDataCache() {
-        this.dataCache = {};
+        this.cache = {};
     }
 
     clearInforUser() {

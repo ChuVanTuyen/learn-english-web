@@ -4,12 +4,14 @@ import { NoteService } from '../../../../shares/services/note.service';
 import { OTHER_WORDS } from '../../../../shares/data/note';
 import { AudioService } from '../../../../shares/services/audio.service';
 import { ResultGameComponent } from "../result-game/result-game.component";
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonService } from '../../../../shares/services/common.service';
+import { combineLatest } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-practice-word',
-    imports: [ResultGameComponent, RouterLink],
+    imports: [ResultGameComponent, RouterLink, CommonModule],
     templateUrl: './practice-word.component.html',
     styleUrl: './practice-word.component.css'
 })
@@ -18,11 +20,14 @@ export class PracticeWordComponent {
     noteId: number = 0;
     arrType: number = 1; //1. đọc chọn nghĩa, 2 cho nghĩa chọn từ đúng, 3 nghe chọn từ
     activeQues: number = 0;
+    page: number = 1;
+    limit: number = 15;
     isShowResult: boolean = false;
 
     nameNotebook: string = '';
 
     listWordNote: WordNotebook[] = [];
+    listWordNoteOrigin: WordNotebook[] = [];
     ortherWords: WordNotebook[] = OTHER_WORDS as WordNotebook[];
     questions: MultiQuestionWord[] = [];
     resultGame!: ResultGame;
@@ -31,32 +36,42 @@ export class PracticeWordComponent {
         private noteService: NoteService,
         protected readonly audioService: AudioService,
         private commonService: CommonService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {}
 
     ngOnInit() {
-        this.route.paramMap.subscribe(params => {
+        combineLatest([
+            this.route.paramMap,
+            this.route.queryParams
+        ]).subscribe(([params, query]) => {
+            this.page = Number(query['page']) ? Number(query['page']) : 1;
             const noteId = Number(params.get('id'));
             if(noteId) {
                 this.noteId = noteId;
-                this.noteService.getDetailNote(this.noteId).subscribe({
-                    next: res => {
-                        this.nameNotebook = res.name;
-                        this.listWordNote = res.words;
-                        this.preparePractice();
-                    }
-                })
+                if(this.commonService.getEnvironment() === 'client') {
+                    this.noteService.getDetailNote(this.noteId).subscribe({
+                        next: res => {
+                            this.nameNotebook = res.name;
+                            this.listWordNoteOrigin = res.words;
+                            this.listWordNote = this.listWordNoteOrigin.slice(this.limit * (this.page - 1), this.limit * this.page);
+                            this.preparePractice();
+                        }
+                    })
+                }
+            } else {
+                this.router.navigate(['/notebook']);
             }
         });
     }
 
     preparePractice() {
         this.resultGame = {
-            name: 'Sổ tay 1',
+            name: 'Kết quả ôn tập',
             date: new Date(),
             time: 0,
-            total: 6,
-            correct: 4
+            total: this.listWordNote.length,
+            correct: 0
         }
         if(this.commonService.getEnvironment() === 'client') {
             this.timeInterval = setInterval(() => {

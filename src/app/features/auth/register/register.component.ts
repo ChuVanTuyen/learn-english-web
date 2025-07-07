@@ -58,7 +58,7 @@ export class RegisterComponent {
             next: (res) => {
                 this.loading = false;
                 this.commonService.showNotify('Đăng ký tài khoản thành công', 'success');
-                this.router.navigate(['/auth/user']);
+                this.router.navigate(['/auth/login']);
             },
             error: err => {
                 this.loading = false;

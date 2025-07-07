@@ -11,6 +11,8 @@
         }@else {
             <div class="text-center py-12 text-[#565656] font-semibold">Danh sách sổ tay trống</div>
         }
+
+        <div (click)="commonService.closeModal('modal-add-to-note')" class="btn-primary w-[120px] mx-auto text-center mt-5">Đóng</div>
         @if(loading) {
             <div class="loader"></div>
         }

@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import {CdkDragEnd, CdkDragMove, CdkDragStart, DragDropModule} from '@angular/cdk/drag-drop';
 import { ResultGame, WordFlashCard, WordNotebook } from '../../../../common/interfaces/note';
 import { AudioService } from '../../../../shares/services/audio.service';
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet, SlicePipe } from '@angular/common';
 import { ResultGameComponent } from "../result-game/result-game.component";
 import { CommonService } from '../../../../shares/services/common.service';
 import { NoteService } from '../../../../shares/services/note.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-flashcard',
@@ -28,69 +29,12 @@ export class FlashcardComponent {
     forget: number = 0;
     total: number = 0;
     noteId: number = 0;
+    page: number = 1;
+    limit: number = 15;
 
     nameNotebook: string = '';
 
-    words: WordNotebook[] = [
-        {
-            "id": 818,
-            "notebook_id": 21,
-            "word": "some",
-            "pronounce": "/sʌm, səm/",
-            "mean": "nào đó",
-            "note": ""
-        },
-        {
-            "id": 817,
-            "notebook_id": 21,
-            "word": "western",
-            "pronounce": "/'west n/",
-            "mean": "(thuộc) phía tây; của phưng tây",
-            "note": ""
-        },
-        {
-            "id": 816,
-            "notebook_id": 21,
-            "word": "west",
-            "pronounce": "/west/",
-            "kind": "",
-            "mean": "hướng tây, phưng tây, phía tây",
-            "note": ""
-        },
-        {
-            "id": 815,
-            "notebook_id": 21,
-            "word": "good",
-            "pronounce": "/gud/",
-            "kind": "",
-            "mean": "tốt, hay, tuyệt",
-            "note": ""
-        },
-        {
-            "id": 814,
-            "notebook_id": 21,
-            "word": "okok",
-            "pronounce": "oke",
-            "mean": "được được",
-            "note": ""
-        },
-        {
-            "id": 812,
-            "notebook_id": 21,
-            "word": "ok1",
-            "pronounce": "",
-            "mean": "được1",
-            "note": ""
-        },
-        {
-            "id": 811,
-            "notebook_id": 21,
-            "word": "hello",
-            "pronounce": "helo",
-            "mean": "Xin chào",
-            "note": ""
-        }
-    ];
+    words: WordNotebook[] = [];
     listWord: WordFlashCard[] = [];
     listWordOrigin: WordFlashCard[] = [];
 
@@ -102,28 +46,37 @@ export class FlashcardComponent {
         private audioService: AudioService,
         private commonService: CommonService,
         private route: ActivatedRoute,
-        private noteService: NoteService
+        private noteService: NoteService,
+        private router: Router
     ) {}
 
     ngOnInit() {
-        this.route.paramMap.subscribe(params => {
+        combineLatest([
+            this.route.paramMap,
+            this.route.queryParams
+        ]).subscribe(([params, query]) => {
+            this.page = Number(query['page']) ? Number(query['page']) : 1;
             const noteId = Number(params.get('id'));
             if(noteId) {
                 this.noteId = noteId;
-                this.noteService.getDetailNote(this.noteId).subscribe({
-                    next: res => {
-                        this.nameNotebook = res.name;
-                        this.words = res.words;
-                        this.prepared(this.words);
-                    }
-                })
+                if(this.commonService.getEnvironment() === 'client') {
+                    this.noteService.getDetailNote(this.noteId).subscribe({
+                        next: res => {
+                            this.nameNotebook = res.name;
+                            this.words = res.words;
+                            this.prepared(this.words, this.page, this.limit);
+                        }
+                    })
+                }
+            } else {
+                this.router.navigate(['/notebook']);
             }
         });
     }
 
 
-    prepared(words: WordNotebook[]) {
-        let list: WordNotebook[] = JSON.parse(JSON.stringify(words));
+    prepared(words: WordNotebook[], page: number, limit: number) {
+        let list: WordNotebook[] = JSON.parse(JSON.stringify(words.slice((page-1) * limit, page * limit)));
         this.listWordOrigin = list.map((word, idx) => ({
             ...word,
             status: 0,
@@ -137,8 +90,8 @@ export class FlashcardComponent {
             name: this.nameNotebook,
             date: new Date(),
             time: 0,
-            total: words.length,
-            correct: words.length
+            total: words.slice(limit * (page - 1), limit * page).length,
+            correct: words.slice(limit * (page - 1), limit * page).length
         }
 
         if(this.commonService.getEnvironment() === 'client') {

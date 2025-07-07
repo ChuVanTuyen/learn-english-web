@@ -45,49 +45,67 @@
                                     <div class="loader"></div>
                                 </div>
                             } @else {
-                                @for (word of listWords; track $index) {
-                                    <div class="col-span-6 sm:col-span-3 md:col-span-2 bg-[#f2f2f2] relative p-3 rounded-[20px] cursor-pointer" (click)="openModalSearch(word.word)">
-                                        <div class="flex items-start justify-between">
-                                            <div class="font-medium text-lg">{{ word.word }}</div>
-                                            <div class="flex items-center min-w-max">
-                                                <img (click)="playAudio(word.word, $event)" class="w-6 h-6 mr-1" src="/images/icons/ic_speaker.svg" alt="Audio">
-                                                @if(detailNote.user_id === user?.id) {
-                                                    <div class="w-6 h-6 relative box-action-wrap cursor-pointer">
-                                                        <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
-                                                        <div class="box-action">
-                                                            <div (click)="handleActionWord('edit', word, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
-                                                                <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
-                                                                <span>Sửa</span>
-                                                            </div>
-                                                            <div (click)="handleActionWord('delete', word, $event)" class="flex items-center gap-1">
-                                                                <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
-                                                                <span class="text-[#CD3535]">Xóa</span>
+                                @for (word of listWords | slice:(query ? 0 : (page - 1) * limit):(query ? listWords.length : page*limit); track $index) {
+                                    <div class="flex flex-col justify-between col-span-6 sm:col-span-3 md:col-span-2 bg-[#f2f2f2] relative p-3 rounded-[20px] cursor-pointer" (click)="openModalSearch(word.word)">
+                                        <div>
+                                            <div class="flex items-start justify-between">
+                                                <div class="font-medium text-lg">{{ word.word }}</div>
+                                                <div class="flex items-center min-w-max">
+                                                    <img (click)="playAudio(word.word, $event)" class="w-6 h-6 mr-1" src="/images/icons/ic_speaker.svg" alt="Audio">
+                                                    @if(detailNote.user_id === user?.id) {
+                                                        <div class="w-6 h-6 relative box-action-wrap cursor-pointer">
+                                                            <img class="w-6 h-6" src="/images/icons/ic_menu_dots.svg" alt="Menu Edit">
+                                                            <div class="box-action">
+                                                                <div (click)="handleActionWord('edit', word, $event)" class="flex items-center gap-1 pb-2 mb-2 border-b-[#f2f2f2] border-b border-solid">
+                                                                    <img class="w-6 h-6" src="/images/icons/ic_edit.svg" alt="">
+                                                                    <span>Sửa</span>
+                                                                </div>
+                                                                <div (click)="handleActionWord('delete', word, $event)" class="flex items-center gap-1">
+                                                                    <img class="w-6 h-6" src="/images/icons/ic_delete.svg" alt="">
+                                                                    <span class="text-[#CD3535]">Xóa</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                }
+                                                    }
+                                                </div>
                                             </div>
+                                            @if(word.pronounce) {
+                                                <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
+                                            }
+                                            <div class="mt-1 two-line">{{ word.mean }}</div>
                                         </div>
-                                        @if(word.pronounce) {
-                                            <div class="text-[#595959] text-sm">[ {{ word.pronounce }} ]</div>
-                                        }
-                                        <div class="mt-1 two-line">{{ word.mean }}</div>
+                                        <div (click)="changeNoteWord(word, $event)" class="w-max max-w-full flex mt-1 items-center gap-2 bg-[#E5E5E5] px-2 py-1 rounded-full">
+                                            @if(word.note) {
+                                                <img class="w-5 h-5" src="/images/icons/ic_noted_word.svg" alt="Ghi chú">
+                                                <span class="one-line ">{{ word.note }}</span>
+                                            } @else {
+                                                <img class="w-5 h-5" src="/images/icons/ic_note_word.svg" alt="Ghi chú">
+                                                <span>Ghi chú</span>
+                                            }
+                                        </div>
                                     </div>
                                 }
                             }
                         </div>
+                        @if(!query) {
+                            <div class="mt-4">
+                                <app-paginate-total [total]="listWords.length" [page]="page" [limit]="limit"
+                                    (paginateEvent)="paginateEvent($event)">
+                                </app-paginate-total>
+                            </div>
+                        }
                     </div>
                     <div class="col-span-12 order-1 lg:col-span-3 lg:order-2">
                         <div class="relative mb-3">
                             <img class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2" src="/images/icons/ic_search.png" alt="Search">
                             <input [(ngModel)]="query" (ngModelChange)="filterSearch()" class="text-sm rounded-2xl w-full border bg-white pl-[52px] pr-5 py-3 border-solid border-[#f2f2f2]" type="text" placeholder="Tìm kiếm">
                         </div>
-                        <a routerLink="/notebook/detail/{{ detailNote.id }}/practice" class="block relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                        <a routerLink="/notebook/detail/{{ detailNote.id }}/practice" [queryParams]="{ page }" class="block relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
                             <div class="text-lg font-medium">Ôn tập</div>
                             <div class="w-max text-[#CD3535] bg-[#FDF3F3] mt-6 text-sm font-medium leading-4 px-2 py-1 rounded-full">Mới</div>
                             <img class="w-[124px] h-[124px] absolute rotate-[-15deg] -right-6 -bottom-10" src="/images/icons/ic_folder.svg" alt="Ôn tập">
                         </a>
-                        <a routerLink="/notebook/detail/{{ detailNote.id }}/flashcard" class="block mt-3 relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+                        <a routerLink="/notebook/detail/{{ detailNote.id }}/flashcard" [queryParams]="{ page }" class="block mt-3 relative overflow-hidden shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
                             <div class="text-lg font-medium">Flashcard</div>
                             <div class="w-max text-[#CD3535] bg-[#FDF3F3] mt-6 text-sm font-medium leading-4 px-2 py-1 rounded-full">Mới</div>
                             <img class="w-[124px] h-[124px] absolute rotate-[-15deg] -right-6 -bottom-10" src="/images/icons/ic_flashcard.svg" alt="Flashcard">
@@ -99,4 +117,7 @@
     }
 </div>
 
-<app-add-word />
+@defer {
+    <app-add-word (changeWord)="updateWord()" />
+    <app-edit-note-word (changeWord)="updateWord()" />
+}

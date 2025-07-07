@@ -24,7 +24,6 @@ export class EditNoteComponent {
     idNote: number = 0;
 
     @Input() set notebook(data: Notebook) {
-        console.log('run');
         this.idNote = data.id;
         this.nameNote = data.name;
     };

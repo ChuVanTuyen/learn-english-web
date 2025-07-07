@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../shares/services/user.service';
 import { Router } from '@angular/router';
@@ -19,6 +19,9 @@ export class LoginComponent {
     dataLogin!: FormGroup;
 
     showPass: boolean = false;
+    textErr: string = '';
+
+    @ViewChildren('inputElement') inputFields!: QueryList<ElementRef>;
 
     constructor(
         private userService: UserService,
@@ -31,6 +34,16 @@ export class LoginComponent {
             email: new FormControl('', [Validators.required, Validators.email]),
             password: new FormControl('', [Validators.required, Validators.minLength(6)])
         });
+    }
+
+    handleEnter(index: number, event: Event) {
+        event.preventDefault();
+        const inputsArray = this.inputFields.toArray();
+        if (index < inputsArray.length - 1) {
+            inputsArray[index + 1].nativeElement.focus();
+        } else {
+            this.login();
+        }
     }
 
     login() {
@@ -53,9 +66,8 @@ export class LoginComponent {
 
             },
             error: (err) => {
-                console.log(err);
+                this.textErr = 'Tài khoản hoặc mật khẩu không chính xác!'
                 this.loading = false;
-                this.commonService.showNotify('Đã có lỗi xảy ra vui lòng đăng nhập lại', 'danger');
             }
         });
     }

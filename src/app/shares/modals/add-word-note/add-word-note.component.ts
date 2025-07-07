@@ -5,6 +5,7 @@ import { NoteService } from '../../services/note.service';
 import { DataAddWord, Notebook } from '../../../common/interfaces/note';
 import { BroadcasterService } from '../../services/broadcaster.service';
 import { Word } from '../../../common/interfaces/dictionary';
+import { BASE_URL } from '../../data/config';
 
 @Component({
     selector: 'app-add-word-note',
@@ -19,20 +20,26 @@ export class AddWordNoteComponent {
     word: Word | undefined;
 
     constructor(
-        private commonService: CommonService,
+        protected readonly commonService: CommonService,
         private noteService: NoteService,
         private broadcaster: BroadcasterService
     ) {}
 
     ngOnInit() {
-        this.noteService.getUserNote().subscribe({
-            next: res => {
-                this.listNoteb = res;
-            }
-        });
+        if(this.commonService.getEnvironment() === 'client') {
+            this.noteService.getUserNote().subscribe({
+                next: res => {
+                    this.listNoteb = res;
+                }
+            });
+        }
         this.broadcaster.on<Word>('add-to-note').subscribe(word => {
             this.commonService.openModal('modal-add-to-note');
             this.word = word;
+        });
+
+        this.broadcaster.on<Notebook[]>('update-list-note').subscribe(list => {
+            this.listNoteb = list;
         })
     }
 
@@ -51,7 +58,6 @@ export class AddWordNoteComponent {
                     this.commonService.showNotify('Thêm từ vào ' + note.name + 'thành công', 'success');
                 },
                 error: err => {
-                    console.log(err);
                     this.loading = false;
                     this.commonService.showNotify('Đã có lỗi xảy ra', 'danger');
                 }

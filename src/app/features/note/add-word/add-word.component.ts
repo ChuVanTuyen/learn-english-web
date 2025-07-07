@@ -19,6 +19,7 @@ export class AddWordComponent {
     wordId: number = 0;
     dataAddWord!: FormGroup;
     type: string = 'add';
+    @Output() changeWord = new EventEmitter();
 
     constructor(
         private noteService: NoteService,
@@ -43,7 +44,7 @@ export class AddWordComponent {
                 this.dataAddWord.setValue({
                     word: data.word.word,
                     pronounce: data.word.pronounce,
-                    kind: data.word.pronounce,
+                    kind: data.word.kind,
                     mean: data.word.mean,
                     note: data.word.note,
                 })
@@ -68,6 +69,8 @@ export class AddWordComponent {
         this.noteService.addWordToNote(this.dataAddWord.value, this.noteId).subscribe({
             next: res => {
                 this.loading = false;
+                this.changeWord.emit();
+                this.close();
                 this.commonService.showNotify('Thêm từ thành công', 'success');
             },
             error: res => {
@@ -83,6 +86,8 @@ export class AddWordComponent {
         this.noteService.editWordNote(this.dataAddWord.value, this.wordId).subscribe({
             next: res => {
                 this.loading = false;
+                this.changeWord.emit();
+                this.close();
                 this.commonService.showNotify('Sửa từ thành công', 'success');
             },
             error: res => {
@@ -90,5 +95,18 @@ export class AddWordComponent {
                 this.commonService.showNotify('Đã có lỗi cảy ra', 'danger');
             }
         })
+    }
+
+    close() {
+        this.dataAddWord.setValue({
+            word: '',
+            pronounce: '',
+            kind: '',
+            mean: '',
+            note: '',
+        });
+
+        this.submitted = false;
+        this.commonService.closeModal('modal-add-word')
     }
 }
