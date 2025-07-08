@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { ModalComponent } from "../modal/modal.component";
 import { CommonService } from '../../services/common.service';
 import { NoteService } from '../../services/note.service';
 import { DataAddWord, Notebook } from '../../../common/interfaces/note';
 import { BroadcasterService } from '../../services/broadcaster.service';
 import { Word } from '../../../common/interfaces/dictionary';
-import { BASE_URL } from '../../data/config';
-
+import { InforUser } from '../../../common/interfaces/user';
 @Component({
     selector: 'app-add-word-note',
     imports: [ModalComponent],
@@ -19,23 +18,29 @@ export class AddWordNoteComponent {
     listNoteb: Notebook[] = [];
     word: Word | undefined;
 
+    user: InforUser | undefined;
+
     constructor(
         protected readonly commonService: CommonService,
         private noteService: NoteService,
         private broadcaster: BroadcasterService
-    ) {}
+    ) {
+        effect(() => {
+            this.user = this.commonService.sUser();
+            this.getListNote();
+        });
+    }
 
     ngOnInit() {
-        if(this.commonService.getEnvironment() === 'client') {
-            this.noteService.getUserNote().subscribe({
-                next: res => {
-                    this.listNoteb = res;
-                }
-            });
-        }
+        this.getListNote();
         this.broadcaster.on<Word>('add-to-note').subscribe(word => {
-            this.commonService.openModal('modal-add-to-note');
-            this.word = word;
+            if(this.commonService.sUser()) {
+                this.commonService.openModal('modal-add-to-note');
+                this.word = word;
+            } else {
+                this.commonService.showNotify('Bạn cần đăng nhập để sử dụng tính năng này', 'warning');
+            }
+            
         });
 
         this.broadcaster.on<Notebook[]>('update-list-note').subscribe(list => {
@@ -43,6 +48,19 @@ export class AddWordNoteComponent {
         })
     }
 
+    getListNote() {
+        if(this.commonService.getEnvironment() === 'client') {
+            if(this.user) {
+                this.noteService.getUserNote().subscribe({
+                    next: res => {
+                        this.listNoteb = res;
+                    }
+                });
+            } else {
+                this.listNoteb = [];
+            }
+        }
+    }
     confirmAdd(note: Notebook) {
         if(this.word) {
             const data: DataAddWord = {

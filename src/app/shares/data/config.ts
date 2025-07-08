@@ -8,4 +8,4 @@ export const HTTP_OPTION = {
 };
 
 export const BASE_URL = environment.URL + 'api/';
-export const BASE_URL_PUBLIC = environment.URL;
+export const BASE_URL_PUBLIC = environment.URL + 'api/';

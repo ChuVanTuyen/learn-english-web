@@ -23,6 +23,8 @@ export class DetailWordComponent {
     results: WritableSignal<Word[]> = signal([]);
     detail: Signal<Word | undefined> = computed(() => this.results().find(w => w.word === this.query()));
     autoTrans: WritableSignal<AutoTrans | undefined> = signal(undefined);
+    loading1: boolean = false;
+    loading2: boolean = false;
 
     private readonly destroyRef = inject(DestroyRef); 
     constructor(
@@ -33,16 +35,24 @@ export class DetailWordComponent {
         private broadcaster: BroadcasterService
     ) {
         effect(() => {
+            this.loading1 = true;
             this.dictionaryService.search(this.query())
                 .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe(res => this.results.set(res));
+                .subscribe(res => {
+                    this.loading1 = false;
+                    this.results.set(res);
+                });
         });
 
         effect(() => {
             if (!this.detail()) {
+                this.loading2 = true;
                 this.dictionaryService.autoTranslate(this.query())
                     .pipe(takeUntilDestroyed(this.destroyRef))
-                    .subscribe(res => this.autoTrans.set(res));
+                    .subscribe(res => {
+                        this.loading2 = false;
+                        this.autoTrans.set(res)
+                    });
             }
         });
     }
