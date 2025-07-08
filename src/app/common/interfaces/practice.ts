@@ -1,4 +1,5 @@
 import { ObjectKey } from "./common";
+import { Question } from "./exam";
 
 export interface HistoryPractice {
     id: number,
@@ -19,4 +20,9 @@ export interface PracticeSummary {
 export interface PracticeSummaryResponse {
     summary: PracticeSummary,
     history: HistoryPractice[]
+}
+
+export interface DetailHistoryPractice {
+    historyPractice: HistoryPractice,
+    questions: Question[]
 }

@@ -2,14 +2,13 @@
     <div class="flex justify-between items-center mt-4 mb-3">
         <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/exam">
             <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
-            Trở về
+            <span class="hidden sm:inline">Trở về</span>
         </a>
         @if(detailTest) {
             <div class="text-2xl font-semibold">{{ detailTest.name }}</div>
         }
-        <div class="flex items-center bg-white rounded-full px-4 py-2">
-            Tùy chọn
-            <img class="w-[14px] ms-1" src="/images/icons/ic_dots.png" alt="back">
+        <div class="p-2" (click)="toggleMobile(true)">
+            <img class="right-bar-mb-open" src="/images/icons/ic_menu.png" alt="Menu mobile">
         </div>
     </div>
     @if(detailTest) {
@@ -27,12 +26,12 @@
                             <div>{{ part.title }}</div>
                             @if(partIntros[skillIdx * 4 + partIdx]) {
                                 @if(partIntros[skillIdx * 4 + partIdx].image) {
-                                    <img class="block max-w-[390px] mx-auto" [src]="partIntros[skillIdx * 4 + partIdx].image" alt="Intro">
+                                    <img class="block max-w-[390px] w-full mx-auto" [src]="partIntros[skillIdx * 4 + partIdx].image" alt="Intro">
                                 }
                                 @if(partIntros[skillIdx * 4 + partIdx].title) {
                                     <div>{{ partIntros[skillIdx * 4 + partIdx].title }}</div>
                                 }
-                                <div class="grid gap-3 grid-cols-2 mt-2">
+                                <div class="grid gap-3 sm:grid-cols-2 mt-2">
                                     @for (answer of partIntros[skillIdx * 4 + partIdx].answers; track $index) {
                                         <div class="btn-answer">
                                             {{ answer }}
@@ -44,7 +43,7 @@
                         @for (ques of part.questions; track $index) {
                             <div class="p-4 rounded-2xl bg-white mb-3 whitespace-pre-line">
                                 @if(ques.image) {
-                                    <img class="block max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + ques.image" alt="Intro">
+                                    <img class="block max-w-[390px] w-full mx-auto" [src]="'http://localhost:3000/' + ques.image" alt="Intro">
                                 }
                                 @if(ques.text_read) {
                                     <div [innerHTML]="ques.text_read | safe:'html'"></div>
@@ -55,9 +54,9 @@
                                         <span [innerHTML]="child.title"></span>
                                     </div>
                                     @if(child.image) {
-                                        <img class="max-w-[390px] mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
+                                        <img class="max-w-[390px] w-full mx-auto" [src]="'http://localhost:3000/' + child.image" [alt]="child.id">
                                     }
-                                    <div class="grid gap-3 grid-cols-2 mt-3">
+                                    <div class="grid gap-3 sm:grid-cols-2 mt-3">
                                         @for (answer of child.answers; track answer;let ansIdx = $index) {
                                             <div class="btn-answer" [class]="{
                                                 'active': ansIdx === child.selected,
@@ -90,89 +89,94 @@
                 }
             </div>
             <div class="col-span-4 lg:col-span-1">
-                <div class="mb-3 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl status-{{ history.score >= 500 ? 'success' : 'wrong' }}">
-                    <div class="font-semibold">{{ detailTest.name }}</div>
-                    <div class="relative">
-                        <svg viewBox="0 0 36 36" class="circular-chart">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle-bg"></path>
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle" [attr.stroke-dasharray]="((history.score / 990 * 100) | number:'1.0-0') + ', 100'"></path>
-                        </svg>
-                        <div class="text-center absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4">
-                            <div class="result-text text-[34px] font-semibold leading-[42px]">
-                                {{ history.score }}
+                <div class="sticky top-3 right-bar-mb" [class.active]="isShowMobile">
+                    <div class="flex justify-end pb-3" (click)="toggleMobile(false)">
+                        <img class="w-6 h-6" src="/images/icons/ic_close.png" alt="">
+                    </div>
+                    <div class="mb-3 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl status-{{ history.score >= 500 ? 'success' : 'wrong' }}">
+                        <div class="font-semibold">{{ detailTest.name }}</div>
+                        <div class="relative">
+                            <svg viewBox="0 0 36 36" class="circular-chart">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle-bg"></path>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle" [attr.stroke-dasharray]="((history.score / 990 * 100) | number:'1.0-0') + ', 100'"></path>
+                            </svg>
+                            <div class="text-center absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4">
+                                <div class="result-text text-[34px] font-semibold leading-[42px]">
+                                    {{ history.score }}
+                                </div>
+                                <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full tag w-max mx-auto">
+                                    {{ history.score >= 500 ? 'Đạt' : 'Chưa đạt' }}
+                                </div>
                             </div>
-                            <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full tag w-max mx-auto">
-                                {{ history.score >= 500 ? 'Đạt' : 'Chưa đạt' }}
+                        </div>
+                        <div class="flex justify-between items-center text-sm mt-2">
+                            <div class="text-center">
+                                <div class="text-[#595959]">Chính xác</div>
+                                <div class="font-semibold">{{ history.correct_read + history.correct_listen }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[#595959]">Thời gian</div>
+                                <div class="font-semibold">{{ history.time | datatime:'h:mm:ss' }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[#595959]">Câu hỏi</div>
+                                <div class="font-semibold">200</div>
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center text-sm mt-2">
-                        <div class="text-center">
-                            <div class="text-[#595959]">Chính xác</div>
-                            <div class="font-semibold">{{ history.correct_read + history.correct_listen }}</div>
+                    <div class="p-3 rounded-3xl bg-white mb-3">
+                        <div class="flex items-center">
+                            <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
+                            <span>Nghe ({{ history.correct_listen}} / 100)</span>
                         </div>
-                        <div class="text-center">
-                            <div class="text-[#595959]">Thời gian</div>
-                            <div class="font-semibold">{{ history.time | datatime:'h:mm:ss' }}</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-[#595959]">Câu hỏi</div>
-                            <div class="font-semibold">200</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-3 rounded-3xl bg-white mb-3">
-                    <div class="flex items-center">
-                        <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
-                        <span>Nghe ({{ history.correct_listen}} / 100)</span>
-                    </div>
-                    @for (item of correctPart | slice:0:4; track $index) {
-                        <div class="grid grid-cols-12 gap-2 items-center">
-                            <div class="col-span-4">Part {{ $index + 1 }}</div>
-                            <div class="progress-bar col-span-6">
-                                @if(item > 0) {
-                                    <div class="progress primary" [style.width.%]="item / totalQues[$index] * 100"></div>
-                                }
-                            </div>
-                            <div class="col-span-2">{{ (item / totalQues[$index] * 100) | number:'1.0-0' }}%</div>
-                        </div>
-                    }
-                </div>
-                <div class="p-3 rounded-3xl bg-white mb-3">
-                    <div class="flex items-center">
-                        <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
-                        <span>Nghe ({{ history.correct_read}} / 100)</span>
-                    </div>
-                    @for (item of correctPart | slice:4:8; track $index) {
-                        <div class="grid grid-cols-12 gap-2 items-center">
-                            <div class="col-span-4">Part {{ $index + 5 }}</div>
-                            <div class="progress-bar col-span-6">
-                                @if(item > 0) {
-                                    <div class="progress primary" [style.width.%]="item / totalQues[$index + 4] * 100"></div>
-                                }
-                            </div>
-                            <div class="col-span-2">{{ (item / totalQues[$index + 4] * 100) | number:'1.0-0' }}%</div>
-                        </div>
-                    }
-                </div>
-                <div class="sticky top-3 overflow-y-auto h-[calc(100vh_-_165px)] hide-scroll-bar rounded-3xl">
-                    @for (skill of detailTest.skills; track skill) {
-                        <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
-                            <div class="font-semibold text-lg pb-3 border-b-[var(--color-neutral-95)] border-b">{{ skill.name }}</div>
-                            @for (part of skill.parts; track part; let partIdx = $index) {
-                                <div class="font-medium mb-2 mt-3">Part {{ partIdx + 1 }}</div>
-                                <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
-                                    @for (ques of part.questions; track ques; let quesIdx = $index) {
-                                        @for (child of ques.child_ques; track child; let childIdx = $index) {
-                                            <div class="question-item active {{ child.isCorrect ? 'success' : 'fail' }}" (click)="chooseQuestion(child.idx)">
-                                                {{ child.idx }}
-                                            </div>
-                                        }
+                        @for (item of correctPart | slice:0:4; track $index) {
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-4">Part {{ $index + 1 }}</div>
+                                <div class="progress-bar col-span-6">
+                                    @if(item > 0) {
+                                        <div class="progress primary" [style.width.%]="item / totalQues[$index] * 100"></div>
                                     }
                                 </div>
-                            }
+                                <div class="col-span-2">{{ (item / totalQues[$index] * 100) | number:'1.0-0' }}%</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="p-3 rounded-3xl bg-white mb-3">
+                        <div class="flex items-center">
+                            <img class="w-5 h-5 mr-2" src="/images/icons/ic_headset.svg" alt="Listent">
+                            <span>Nghe ({{ history.correct_read}} / 100)</span>
                         </div>
-                    }
+                        @for (item of correctPart | slice:4:8; track $index) {
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-4">Part {{ $index + 5 }}</div>
+                                <div class="progress-bar col-span-6">
+                                    @if(item > 0) {
+                                        <div class="progress primary" [style.width.%]="item / totalQues[$index + 4] * 100"></div>
+                                    }
+                                </div>
+                                <div class="col-span-2">{{ (item / totalQues[$index + 4] * 100) | number:'1.0-0' }}%</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="sticky top-3 overflow-y-auto h-[calc(100vh_-_165px)] hide-scroll-bar rounded-3xl">
+                        @for (skill of detailTest.skills; track skill) {
+                            <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
+                                <div class="font-semibold text-lg pb-3 border-b-[var(--color-neutral-95)] border-b">{{ skill.name }}</div>
+                                @for (part of skill.parts; track part; let partIdx = $index) {
+                                    <div class="font-medium mb-2 mt-3">Part {{ partIdx + 1 }}</div>
+                                    <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
+                                        @for (ques of part.questions; track ques; let quesIdx = $index) {
+                                            @for (child of ques.child_ques; track child; let childIdx = $index) {
+                                                <div class="question-item active {{ child.isCorrect ? 'success' : 'fail' }}" (click)="chooseQuestion(child.idx)">
+                                                    {{ child.idx }}
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

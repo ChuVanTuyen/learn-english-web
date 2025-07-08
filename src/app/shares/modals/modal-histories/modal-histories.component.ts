@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { ModalComponent } from "../../components/modal/modal.component";
 import { HistoryTest } from '../../../common/interfaces/exam';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-modal-histories',

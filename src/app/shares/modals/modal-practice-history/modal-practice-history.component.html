@@ -1,0 +1,32 @@
+<app-modal id="modal-practice-histories">
+    <div class="fixed -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 max-w-[600px] shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl">
+        <div class="mb-4 font-semibold flex justify-between items-center">
+            <div>Lịch sử luyện tập</div>
+            <img width="18" src="/images/icons/ic_close.png" alt="Close" (click)="commonService.closeModal('modal-histories')">
+        </div>
+        <table class="w-full text-center text-[#2C416D] overflow-hidden rounded-2xl border-collapse">
+            <tr class="bg-[#E3ECF6]">
+                <th>Thời gian</th>
+                <th>Đúng</th>
+                <th>Kết quả</th>
+                <th></th>
+            </tr>
+            @for (history of histories; track $index) {
+                <tr>
+                    <td>{{ history.created_at ? (history.created_at | date: 'hh:mm dd/MM/yyyy') : '11:10 22/6/2025' }}</td>
+                    <td>{{ history.correct / history.total * 100 | number:'1.0-0' }}%</td>
+                    <td>
+                        @if(history.correct / history.total >= 0.5) {
+                            <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full text-[#0F8C66] bg-[#EDFCF5]">Đạt</div>
+                        } @else {
+                            <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full text-[#CD3535] bg-[#FDF3F3]">Chưa đạt</div>
+                        }
+                    </td>
+                    <td>
+                        <a (click)="commonService.closeModal('modal-practice-histories')" routerLink="/practice/history/{{ partId }}/{{ history.id }}">Xem chi tiết</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</app-modal>

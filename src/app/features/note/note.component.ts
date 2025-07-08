@@ -45,7 +45,7 @@ export class NoteComponent {
     }
 
     ngAfterViewInit() {
-        // this.commonService.openModal('modal-create-notebook');
+        this.commonService.scrollToTop();
     }
 
     handlePreAddNote() {

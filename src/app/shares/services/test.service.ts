@@ -2,27 +2,28 @@ import { Injectable } from '@angular/core';
 import * as CONFIG from "../data/config";
 import { HttpClient } from '@angular/common/http';
 import { DetailTest, HistoryTest, SaveHistoryTest } from '../../common/interfaces/exam';
-import { map, of, tap } from 'rxjs';
-import { ObjectKey } from '../../common/interfaces/common';
+import { of, tap } from 'rxjs';
+import { CommonService } from './common.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TestService {
 
-    cache: ObjectKey<any> = {};
+    // cache: ObjectKey<any> = {};
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private commonService: CommonService
     ) { }
 
     getDetailTest(id: number) {
         const url = CONFIG.BASE_URL + 'exam/detail/' + id;
-        if (this.cache[url]) return of<DetailTest>(this.cache[url]);
+        if (this.commonService.getDataCache(url)) return of<DetailTest>(this.commonService.getDataCache(url));
         return this.http.get<DetailTest>(url, CONFIG.HTTP_OPTION).pipe(
             tap(res => {
                 if (res.id) {
-                    this.cache[url] = res;
+                    this.commonService.setDataCache(url, res);
                 }
                 return res;
             })
@@ -36,9 +37,9 @@ export class TestService {
 
     getListExamAndHistory() {
         const url = CONFIG.BASE_URL + 'exam';
-        if (this.cache[url]) return of(this.cache[url]);
+        if (this.commonService.getDataCache(url)) return of(this.commonService.getDataCache(url));
         return this.http.get(url, CONFIG.HTTP_OPTION).pipe(
-            tap(res => this.cache[url] = res)
+            tap(res => this.commonService.setDataCache(url, res))
         );
     }
 

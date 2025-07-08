@@ -30,5 +30,7 @@ export class HeaderComponent {
     logout() {
         this.commonService.clearInforUser();
         this.commonService.showNotify('Đăng xuất thành công', 'success');
+        this.commonService.clearDataCache();
+        this.router.navigate(['/']);
     }
 }

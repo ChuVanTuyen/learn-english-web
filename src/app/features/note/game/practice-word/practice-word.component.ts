@@ -65,6 +65,10 @@ export class PracticeWordComponent {
         });
     }
 
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
+
     preparePractice() {
         this.resultGame = {
             name: 'Kết quả ôn tập',

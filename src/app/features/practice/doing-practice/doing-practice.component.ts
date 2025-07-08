@@ -28,6 +28,7 @@ export class DoingPracticeComponent {
 
     part: number = 1;
     timeDown: number = 0;
+    isShowMobile: boolean = false;
     submitted: boolean = false;
     loading: boolean = false;
     isAgainFailed: boolean = false;
@@ -130,7 +131,8 @@ export class DoingPracticeComponent {
         }
 
         if(this.practiceService.summary) {
-            summaryPractice = this.practiceService.summary;
+            summaryPractice.done_questions = this.practiceService.summary.done_questions;
+            summaryPractice.false_questions = this.practiceService.summary.false_questions;
         }
 
         this.listQuestion.forEach(ques => {
@@ -169,16 +171,25 @@ export class DoingPracticeComponent {
         this.loading = true;
         this.commonService.scrollToTop();
         this.practiceService.savePracticeSummary(summaryPractice, dataSend).subscribe({
-            next: res => {
-                this.practiceService.summary = summaryPractice;
+            next: (res: any) => {
+                this.practiceService.summary = {
+                    done_questions: summaryPractice.done_questions,
+                    false_questions: summaryPractice.false_questions
+                };
                 this.loading = false;
                 this.commonService.showNotify('Nộp bài thành công', 'success');
+                this.router.navigate([`/practice/history/${this.part}/${res.id}`]);
+                this.commonService.clearDataCache();
             },
             error: err => {
                 this.loading = false;
                 this.commonService.showNotify('Đã có lỗi xảy ra', 'danger');
             }
         })
+    }
+
+    toggleMobile(show: boolean) {
+        this.isShowMobile = show;
     }
 
     ngOnDestroy() {

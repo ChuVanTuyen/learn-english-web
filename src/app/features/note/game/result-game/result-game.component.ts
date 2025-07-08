@@ -18,7 +18,7 @@ export class ResultGameComponent {
         private commonService: CommonService
     ) {}
 
-    ngOnInit() {
-
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
     }
 }

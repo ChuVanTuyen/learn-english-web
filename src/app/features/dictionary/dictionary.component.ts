@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, of, Subject, switchMap } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { CommonService } from '../../shares/services/common.service';
 
 @Component({
     selector: 'app-dictionary',
@@ -31,7 +32,8 @@ export class DictionaryComponent {
     private readonly destroyRef = inject(DestroyRef);
     constructor(
         private dictionaryService: DictionaryService,
-        private router: Router
+        private router: Router,
+        private commonService: CommonService
     ) {
         toObservable(this.query).pipe(
             debounceTime(300),
@@ -51,6 +53,10 @@ export class DictionaryComponent {
     }
 
     ngOnInit() {}
+
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
 
     onInputChange(value: string) {
         this.query.set(value);

@@ -2,6 +2,10 @@ import { Routes, UrlSegment } from '@angular/router';
 
 export const PracticeRoutes: Routes = [
     {
+        path: 'history/:part/:historyId',
+        loadComponent: () => import('./history-practice/history-practice.component').then(m => m.HistoryPracticeComponent)
+    },
+    {
         matcher: (url) => {
             const urlArr = ['1', '2', '3', '4', '5', '6', '7'];
             const urlArr1 = ['doing', 'failed'];

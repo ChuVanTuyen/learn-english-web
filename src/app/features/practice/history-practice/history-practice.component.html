@@ -4,7 +4,7 @@
             <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
             <span class="hidden sm:inline">Trở về</span>
         </a>
-        <div class="text-2xl font-semibold">Part {{ part }}</div>
+        <div class="text-2xl font-semibold">Lịch sử <span class="hidden sm:inline">luyện tập</span></div>
         <div class="p-2" (click)="toggleMobile(true)">
             <img class="right-bar-mb-open" src="/images/icons/ic_menu.png" alt="Menu mobile">
         </div>
@@ -34,7 +34,7 @@
                         }
                         <div class="grid gap-3 sm:grid-cols-2 mt-3">
                             @for (answer of child.answers; track answer;let ansIdx = $index) {
-                                <div class="btn-answer" [class.active]="ansIdx === child.selected" (click)="chooseAns(child, ansIdx)"
+                                <div class="btn-answer" [class.active]="ansIdx === child.selected"
                                     [class]="{
                                         'active': (submitted || !practiceService.testMode) && child.selected > -1 && ansIdx === child.selected,
                                         'success': (submitted || !practiceService.testMode) && child.selected > -1 && ansIdx === child.correct_answer,
@@ -72,20 +72,43 @@
                 <div class="flex justify-end pb-3" (click)="toggleMobile(false)">
                     <img class="w-6 h-6" src="/images/icons/ic_close.png" alt="">
                 </div>
-                <div class="flex items-center justify-between px-4 py-3 rounded-3xl bg-[var(--color-semantic-rhino-90)] mb-6">
-                    <div class="flex items-center">
-                        <img class="w-5 mr-2" src="/images/icons/ic_timer.png" alt="Time">
-                        @if(practiceService.testMode) {
-                            <div>{{ (practiceService.time - timeDown) | datatime:'h:mm:ss' }}</div>
-                        }
+                @if(history) {
+                    <div class="mb-3 shadow-[4px_4px_15px_#ffffff08_inset] bg-white w-full p-4 rounded-3xl status-{{ history.correct / history.total >= 0.5 ? 'success' : 'wrong' }}">
+                        <div class="relative">
+                            <svg viewBox="0 0 36 36" class="circular-chart">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle-bg"></path>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="circle" [attr.stroke-dasharray]="((history.correct / history.total * 100) | number:'1.0-0') + ', 100'"></path>
+                            </svg>
+                            <div class="text-center absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4">
+                                <div class="result-text text-[34px] font-semibold leading-[42px]">
+                                    {{ history.correct / history.total * 100 | number:'1.0-0' }}%
+                                </div>
+                                <div class="text-sm font-medium leading-4 px-2 py-1 rounded-full tag w-max mx-auto">
+                                    {{ history.correct / history.total >= 0.5 ? 'Đạt' : 'Chưa đạt' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm mt-2">
+                            <div class="text-center">
+                                <div class="text-[#595959]">Chính xác</div>
+                                <div class="font-semibold">{{ history.correct}}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[#595959]">Thời gian</div>
+                                <div class="font-semibold">{{ history.time | datatime:'h:mm:ss' }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[#595959]">Câu hỏi</div>
+                                <div class="font-semibold">{{ history.total }}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="btn-primary w-max" (click)="submit()">Nộp bài</div>
-                </div>
-                <div class="col-span-1 p-3 rounded-3xl bg-white h-max mb-4">
+                }
+                <div class="p-3 rounded-3xl bg-white h-max mb-4">
                     <div class="grid grid-cols-[repeat(4,_40px)] justify-around gap-4">
                         @for (ques of listQuestion; track ques; let quesIdx = $index) {
                             @for (child of ques.child_ques; track child; let childIdx = $index) {
-                                <div class="question-item" (click)="chooseQuestion(child.idx)"
+                                <div class="question-item"
                                     [class]="{
                                         'active': child.selected > -1,
                                         'success': !practiceService.testMode && child.selected > -1 && child.isCorrect,

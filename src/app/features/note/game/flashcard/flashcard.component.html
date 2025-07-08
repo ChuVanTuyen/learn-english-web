@@ -2,7 +2,7 @@
     <div class="w-max">
         <a class="flex items-center bg-white rounded-full px-4 py-2" routerLink="/notebook/detail/{{ noteId }}">
             <img class="w-[14px] mr-1" src="/images/icons/ic_arrow_left.png" alt="back">
-            Trở về
+            <span class="hidden sm:inline">Trở về</span>
         </a>
     </div>
     <div class="text-center text-2xl font-semibold">Flashcard</div>
@@ -37,7 +37,7 @@
             </div>
             <div class="flex items-center justify-between box-remember mx-auto mt-4">
                 <div class="box-count left flex items-center justify-center">{{ forget }}</div>
-                <div class="box-count flex items-center justify-center cursor-pointer" title="Detail">
+                <div (click)="searchWord(listWord[0].word)" class="box-count flex items-center justify-center cursor-pointer" title="Detail">
                     <img width="28" src="/images/icons/ic_info.png" alt="Detail">
                 </div>
                 <div class="box-count flex items-center justify-center right">{{ total - listWord.length }}</div>
@@ -68,6 +68,6 @@
             }
             <p class="mean">{{ word.mean }}</p>
         }
-
     </div>
+    <img (click)="playAudio(listWord[0].word, $event)" class="w-8 h-8 absolute top-5 right-5" src="/images/icons/ic_speaker.svg" alt="Audio">
 </ng-template>

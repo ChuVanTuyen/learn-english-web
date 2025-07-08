@@ -24,7 +24,7 @@
         </div>
         <div class="flex justify-center">
             <a class="btn-primary mr-3" routerLink="/practice/{{ part }}/doing">Bắt đầu</a>
-            <button class="btn-danger" routerLink="/practice/{{ part }}/failed">Làm lại câu sai</button>
+            <button class="btn-danger" (click)="openFailQues()">Làm lại câu sai</button>
         </div>
     </div>
     <div class="col-span-2 lg:col-span-1 md:grid md:grid-cols-2 md:gap-4">
@@ -76,7 +76,10 @@
             </div>
         }
         <div class="bg-white rounded-md col-span-2 p-4">
-            <div class="font-semibold text-lg mb-4">Lịch sử luyện tập</div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="font-semibold text-lg">Lịch sử luyện tập</div>
+                <div (click)="commonService.openModal('modal-practice-histories')" class="btn-warn !py-1 !px-3">Chi tiết</div>
+            </div>
             <div class="max-h-[280px] overflow-hidden">
                 @if(!loading) {
                     <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
@@ -94,5 +97,7 @@
             </div>
         </div>
     </div>
-    
 </div>
+@if(history && history.length > 0) {
+    <app-modal-practice-history [histories]="history"/>
+}

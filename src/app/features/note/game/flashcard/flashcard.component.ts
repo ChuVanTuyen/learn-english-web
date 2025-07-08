@@ -8,6 +8,7 @@ import { CommonService } from '../../../../shares/services/common.service';
 import { NoteService } from '../../../../shares/services/note.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { combineLatest } from 'rxjs';
+import { BroadcasterService } from '../../../../shares/services/broadcaster.service';
 
 @Component({
     selector: 'app-flashcard',
@@ -47,7 +48,8 @@ export class FlashcardComponent {
         private commonService: CommonService,
         private route: ActivatedRoute,
         private noteService: NoteService,
-        private router: Router
+        private router: Router,
+        private broadcaster: BroadcasterService
     ) {}
 
     ngOnInit() {
@@ -74,6 +76,9 @@ export class FlashcardComponent {
         });
     }
 
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
 
     prepared(words: WordNotebook[], page: number, limit: number) {
         let list: WordNotebook[] = JSON.parse(JSON.stringify(words.slice((page-1) * limit, page * limit)));
@@ -167,6 +172,11 @@ export class FlashcardComponent {
     playAudio(word: string, event: any) {
         this.audioService.playAudio(word);
         event.stopPropagation();
+    }
+
+    searchWord(word?: string) {
+        if(!word) return;
+        this.broadcaster.broadcast('open-modal-search', word);
     }
 
     ngOnDestroy() {

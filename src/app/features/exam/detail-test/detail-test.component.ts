@@ -25,6 +25,7 @@ import { DatatimePipe } from "../../../common/pipes/datatime.pipe";
 export class DetailTestComponent {
 
     loading: boolean = false;
+    isShowMobile: boolean = false;
 
     testId: number = 0;
     detailTest!: DetailTest;
@@ -65,6 +66,10 @@ export class DetailTestComponent {
                 return;
             }
         })
+    }
+
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
     }
 
     handleTest() {
@@ -151,8 +156,10 @@ export class DetailTestComponent {
         result.score = ConvertListenScore[result.correct_listen] + ConvertReadScore[result.correct_read];
 
         this.testService.saveHistoryExam(result, this.detailTest.id).subscribe({
-            next: res => {
+            next: (res: any) => {
+                this.router.navigate(['/exam/history/' + this.detailTest.id + '-' + res.id])
                 this.commonService.showNotify('Nộp bài thành công', 'success');
+                this.commonService.clearDataCache();
             }
         });
     }
@@ -162,6 +169,10 @@ export class DetailTestComponent {
             /src="(?!https?:\/\/|\/\/)([^"]+)"/g,
             (match, path) => `src="${domain}${path}"`
         );
+    }
+
+    toggleMobile(show: boolean) {
+        this.isShowMobile = show;
     }
 
     ngOnDestroy() {

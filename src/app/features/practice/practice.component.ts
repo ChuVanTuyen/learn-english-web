@@ -17,6 +17,10 @@ export class PracticeComponent {
         private router: Router
     ) {}
 
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
+
     openPart(url: string) {
         if(this.commonService.sUser()) {
             this.router.navigate(['/practice/' + url]);

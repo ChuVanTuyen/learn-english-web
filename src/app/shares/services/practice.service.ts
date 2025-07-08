@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import * as CONFIG from "../data/config";
 import { HttpClient } from '@angular/common/http';
 import { Question } from '../../common/interfaces/exam';
-import { HistoryPractice, PracticeSummary, PracticeSummaryResponse } from '../../common/interfaces/practice';
+import { DetailHistoryPractice, HistoryPractice, PracticeSummary, PracticeSummaryResponse } from '../../common/interfaces/practice';
+import { CommonService } from './common.service';
+import { Observable, of, tap } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +19,8 @@ export class PracticeService {
     summary: PracticeSummary | undefined;
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private commonService: CommonService
     ) { }
 
     getQuestions(partId: number, limit: number, isAgainFailed: boolean) {
@@ -36,6 +39,18 @@ export class PracticeService {
             summary: summary,
             history: history
         }
-        return this.http.post(url, data, { responseType: 'text'  });
+        return this.http.post(url, data);
+    }
+
+    getDetailHistory(historyId: number): Observable<DetailHistoryPractice> {
+        const url = CONFIG.BASE_URL + 'practice/detail-history/' + historyId;
+        if(this.commonService.getDataCache(url)) return of(this.commonService.getDataCache(url));
+        return this.http.get<DetailHistoryPractice>(url).pipe(
+            tap(res => {
+                if(res.historyPractice) {
+                    this.commonService.setDataCache(url, res);
+                }
+            })
+        );
     }
 }

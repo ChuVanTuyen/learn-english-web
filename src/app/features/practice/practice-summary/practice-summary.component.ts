@@ -4,18 +4,20 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { PracticeService } from '../../../shares/services/practice.service';
 import { FormsModule } from '@angular/forms';
 import { ARR_NUM_QUES } from '../../../shares/data/practice';
-import { CommonService } from '../../../shares/services/common.service';
 import { HistoryPractice, PracticeSummary } from '../../../common/interfaces/practice';
 import { CommonModule } from '@angular/common';
+import { ModalPracticeHistoryComponent } from "../../../shares/modals/modal-practice-history/modal-practice-history.component";
+import { CommonService } from '../../../shares/services/common.service';
 
 @Component({
     selector: 'app-practice-summary',
     imports: [
-        CommonModule,
-        CanvasJSAngularChartsModule,
-        FormsModule,
-        RouterLink
-    ],
+    CommonModule,
+    CanvasJSAngularChartsModule,
+    FormsModule,
+    RouterLink,
+    ModalPracticeHistoryComponent
+],
     templateUrl: './practice-summary.component.html',
     styleUrls: ['../../../shares/styles/button.css', './practice-summary.component.css']
 })
@@ -71,6 +73,8 @@ export class PracticeSummaryComponent {
     constructor(
         private route: ActivatedRoute,
         protected readonly practiceService: PracticeService,
+        protected readonly commonService: CommonService,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -86,8 +90,8 @@ export class PracticeSummaryComponent {
                     this.practiceService.summary = res.summary;
                     let lineTime: any = [], lineCorrect: any[] = [];
                     res.history.forEach((his, idx) => {
-                        lineCorrect.push({ y: Math.floor(his.correct / his.total * 100), x: idx + 1 });
-                        lineTime.push({ y: Math.ceil(his.time / 60), x: idx + 1 });
+                        lineCorrect.push({ y: Math.round(his.correct / his.total * 100), x: idx + 1 });
+                        lineTime.push({ y: Math.round(his.time / 6) / 10, x: idx + 1 });
                     });
                     this.chartOptions.data[0].dataPoints = lineCorrect;
                     this.chartOptions.data[1].dataPoints = lineTime;
@@ -100,11 +104,23 @@ export class PracticeSummaryComponent {
         });
     }
 
+    ngAfterViewInit() {
+        this.commonService.scrollToTop();
+    }
+
     toggleCheck() {
         this.practiceService.testMode = !this.practiceService.testMode;
     }
 
     hanldeTime() {
         this.practiceService.time = this.practiceService.numQues * this.averageTime[this.part - 1];
+    }
+
+    openFailQues() {
+        if(this.summary && this.summary.false_questions[this.part] && this.summary.false_questions[this.part].length > 0) {
+            this.router.navigate(['/practice/' + this.part + '/failed']);
+        } else {
+            this.commonService.showNotify('Bạn chưa có câu hỏi nào làm sai', 'warning');
+        }
     }
 }

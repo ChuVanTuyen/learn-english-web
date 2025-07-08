@@ -30,6 +30,7 @@ import { CommonService } from '../../../shares/services/common.service';
 export class ResultTestComponent {
 
     loading: boolean = false;
+    isShowMobile: boolean = false;
     testId: number = 0;
     historyId: number = 0;
     detailTest!: DetailTest;
@@ -111,5 +112,9 @@ export class ResultTestComponent {
             /src="(?!https?:\/\/|\/\/)([^"]+)"/g,
             (match, path) => `src="${domain}${path}"`
         );
+    }
+
+    toggleMobile(show: boolean) {
+        this.isShowMobile = show;
     }
 }

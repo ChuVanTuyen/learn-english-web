@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { Test } from '../../common/interfaces/exam';
 import { Router, RouterLink } from '@angular/router';
 import { TestService } from '../../shares/services/test.service';
@@ -13,13 +13,12 @@ import { CommonService } from '../../shares/services/common.service';
         './exam.component.css',
         '../../shares/styles/progress.css',
         '../../shares/styles/button.css'
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    ]
 })
 export class ExamComponent {
 
-    sListTest: WritableSignal<Test[]> = signal([]);
-    sIdxHistory:  WritableSignal<number> = signal(0);
+    listTest: Test[] = [];
+    idxHistory:  number = 0;
 
     constructor(
         private testService: TestService,
@@ -29,12 +28,12 @@ export class ExamComponent {
 
     ngOnInit() {
         this.testService.getListExamAndHistory().subscribe(res => {
-            this.sListTest.set(res);
+            this.listTest = res;
         })
     }
 
     openModalHistory(idx: number) {
-        this.sIdxHistory.set(idx);
+        this.idxHistory = idx;
         setTimeout(() => {
             this.commonService.openModal('modal-histories');
         }, 100)
